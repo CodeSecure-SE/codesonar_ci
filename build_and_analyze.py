@@ -16,11 +16,12 @@ debug = True
 
 # first check if we have all the required arguments
 
-if (len(sys.argv) < 1):
-    print("Missing build command")
+if (len(sys.argv) < 2):
+    print("Insufficient parameters, exiting")
+    print("Usage: build_and_analyze.py <conf-file> <build-command>")
     sys.exit(1)
-
-build_command = " ".join(sys.argv[1:])
+conf_file = sys.argv[1]
+build_command = " ".join(sys.argv[2:])
 
 print ("Build command: " + build_command)
 all_ok=1
@@ -97,7 +98,7 @@ os.getenv("PROJECT_NAME") + " -remote-archive \"/saas/*\" -foreground " + \
             " -hubuser " + os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + \
             " -project " + os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
             " -name \"" + datetime.now().strftime("%m/%d/%Y-%H:%M:%S") +"\"" + \
-            " -conf-file conf/codesonar-release.conf" + \
+            " -conf-file " + conf_file + \
             " " + os.getenv("CSONAR_HUB_URL") + " " + \
             build_command
 
@@ -141,7 +142,7 @@ command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + \
             " -property New_findings \"" + property_new_findings + "\""\
             " -property PR_link \"" +  property_pr_link + "\"" \
             " -name \"" + datetime.now().strftime("%m/%d/%Y-%H:%M:%S") +"\"" + \
-            " -conf-file conf/codesonar-release.conf" + \
+            " -conf-file " + conf_file + \
             " " + os.getenv("CSONAR_HUB_URL") 
 
 if debug:
