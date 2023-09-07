@@ -12,7 +12,7 @@ import urllib.parse
 from datetime import datetime
 
 
-debug = False
+debug = True
 
 # first check if we have all the required arguments
 
