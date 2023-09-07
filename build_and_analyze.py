@@ -68,7 +68,7 @@ if os.getenv('IS_PR') == 'pull_request':
     link = "{\"limit\":1,\"orderBy\":[{\"analysisId\":\"DESCENDING\"}],\"columns\":[\"analysisId\"]}"
     query = "\"branch.name\"=\"" + os.getenv("TARGET") + "\"state=\"Finished\""
     
-    command = os.getenv('CSONAR_CSHOME') + "codesonar/bin/codesonar get -auth password -hubuser " + \
+    command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth password -hubuser " + \
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
         os.getenv('CSONAR_HUB_URL') + "/analysis_search.csv?sanlgrid_json=" + \
         urllib.parse.quote(link) + "\&query=" + urllib.parse.quote(query) + " -o - > result"
@@ -91,7 +91,7 @@ if os.getenv('IS_PR') == 'pull_request':
         print ("Target project analysis id: " + target_project_aid)
 
 #Perform the actual build
-command = os.getenv('CSONAR_CSHOME') + "codesonar/bin/codesonar build -clean " + \
+command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar build -clean " + \
 os.getenv("PROJECT_NAME") + " -remote-archive \"/saas/*\" -foreground " + \
             " -auth password" + \
             " -hubuser " + os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + \
@@ -133,7 +133,7 @@ else:
 if debug:
     print("New findings: " + property_new_findings)
             
-command = os.getenv('CSONAR_CSHOME') + "codesonar/bin/codesonar analyze " + \
+command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + \
             os.getenv("PROJECT_NAME") + " -remote-archive \"/saas/*\" -foreground " + \
             " -auth password" + \
             " -hubuser " + os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + \
@@ -154,7 +154,7 @@ if result != 0:
 
 # Download the new findings results in SARIF, if it is a pull request
 if os.getenv('IS_PR') == 'pull_request':
-    command = os.getenv('CSONAR_CSHOME') + "codesonar/bin/codesonar get -auth password -hubuser " + \
+    command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth password -hubuser " + \
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
         "\"" +os.getenv('CSONAR_HUB_URL') + "/warning_detail_search.sarif?query=" + \
         urllib.parse.quote("aid:"+str(current_project_aid) + " DIFFERENCE aid:" + str(target_project_aid)) + \
