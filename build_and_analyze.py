@@ -39,8 +39,6 @@ check_env('CSONAR_HUB_PASSWORD', 'Password for CodeSonar HUB')
 check_env('CSONAR_CSHOME', 'Path to CodeSonar installation')
 check_env('ROOT_TREE', 'Path to the project-tree in the CodeSonar HUB')
 check_env('PROJECT_NAME', 'Name of the project in the CodeSonar HUB')
-check_env('DOCKER_USERNAME', 'Username for Docker Hub')
-check_env('DOCKER_TOKEN', 'Token for Docker Hub')
 check_env('GITHUB_API_URL', 'URL for GitHub API')
 check_env('GITHUB_TOKEN', 'Token for GitHub API')
 check_env('GITHUB_CAFILE', 'Path to GitHub CA (cert) file')
@@ -66,7 +64,7 @@ f.close()
 target_project_aid = 0
 
 # If this is a PR/MR, find the analysis-id of the latest analysis on the target branch
-if os.getenv('IS_PR') == 'true':
+if os.getenv('IS_PR') == 'pull_request':
     link = "{\"limit\":1,\"orderBy\":[{\"analysisId\":\"DESCENDING\"}],\"columns\":[\"analysisId\"]}"
     query = "\"branch.name\"=\"" + os.getenv("TARGET") + "\"state=\"Finished\""
     
@@ -113,7 +111,7 @@ if result != 0:
     sys.exit(1)
 
 #Construct the properties
-if os.getenv("IS_PR") == "true":
+if os.getenv('IS_PR') == 'pull_request':
     property_pr_link = os.getenv('GITHUB_REPO_URL') + "/pull/" + os.getenv('PULL_REQUEST_NUMBER')
 else:
     property_pr_link = "None"
@@ -125,7 +123,7 @@ f = open (os.getenv("PROJECT_NAME") + ".prj_files/aid.txt", "r")
 current_project_aid = f.read()
 f.close()
 
-if os.getenv("IS_PR") == "true":
+if os.getenv('IS_PR') == 'pull_request':
     property_new_findings = os.getenv('CSONAR_HUB_URL') +"/search.html?query=" + \
         urllib.parse.quote("aid:"+str(current_project_aid) + " DIFFERENCE aid:" + str(target_project_aid)) + \
         "&scope=" + urllib.parse.quote("aid:" + str(current_project_aid)) + "&swarnings=BJAW"
@@ -155,7 +153,7 @@ if result != 0:
     sys.exit(1)             
 
 # Download the new findings results in SARIF, if it is a pull request
-if os.getenv('IS_PR') == 'true':
+if os.getenv('IS_PR') == 'pull_request':
     command = os.getenv('CSONAR_CSHOME') + "codesonar/bin/codesonar get -auth password -hubuser " + \
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
         "\"" +os.getenv('CSONAR_HUB_URL') + "/warning_detail_search.sarif?query=" + \
