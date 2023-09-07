@@ -104,7 +104,7 @@ os.getenv("PROJECT_NAME") + " -remote-archive \"/saas/*\" -foreground " + \
 if debug:
     print(command)
 
-#result = os.system(command) 
+result = os.system(command) 
 
 if result != 0:
     print ("Problem running build command")
