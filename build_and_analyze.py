@@ -115,7 +115,7 @@ if result != 0:
 if os.getenv('IS_PR') == 'pull_request':
     property_pr_link = os.getenv('GITHUB_REPO_URL') + "/pull/" + os.getenv('PULL_REQUEST_NUMBER')
 else:
-    property_pr_link = "None"
+    property_pr_link = "Not available"
         
 if debug:
             print("PR Link: " + property_pr_link)
@@ -129,7 +129,7 @@ if os.getenv('IS_PR') == 'pull_request':
         urllib.parse.quote("aid:"+str(current_project_aid) + " DIFFERENCE aid:" + str(target_project_aid)) + \
         "&scope=" + urllib.parse.quote("aid:" + str(current_project_aid)) + "&swarnings=BJAW"
 else:
-    property_new_findings = "None"
+    property_new_findings = "Not available"
     
 if debug:
     print("New findings: " + property_new_findings)
