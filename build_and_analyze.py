@@ -141,6 +141,7 @@ command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + \
             " -project " + os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
             " -property New_findings \"" + property_new_findings + "\""\
             " -property PR_link \"" +  property_pr_link + "\"" \
+            " -property target.branch \"" + os.getenv("BRANCH_NAME") + "\"" \
             " -name \"" + datetime.now().strftime("%m/%d/%Y-%H:%M:%S") +"\"" + \
             " -conf-file " + conf_file + \
             " " + os.getenv("CSONAR_HUB_URL") 
