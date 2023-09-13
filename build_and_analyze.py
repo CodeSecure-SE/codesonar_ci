@@ -90,7 +90,7 @@ if os.getenv('IS_PR') == 'pull_request':
         print ("No existing analysis found, continuing")
         target_project_aid = str("0")
     else: 
-        target_project_aid = f.read().splitlines()[1]
+        target_project_aid = resultFile.splitlines()[1]
     f.close()
  
     if debug:
