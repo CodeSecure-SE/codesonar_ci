@@ -40,16 +40,16 @@ check_env('CSONAR_HUB_PASSWORD', 'Password for CodeSonar HUB')
 check_env('CSONAR_CSHOME', 'Path to CodeSonar installation')
 check_env('ROOT_TREE', 'Path to the project-tree in the CodeSonar HUB')
 check_env('PROJECT_NAME', 'Name of the project in the CodeSonar HUB')
-check_env('GITHUB_API_URL', 'URL for GitHub API')
-check_env('GITHUB_TOKEN', 'Token for GitHub API')
-check_env('GITHUB_CAFILE', 'Path to GitHub CA (cert) file')
-check_env('GITHUB_REPO_URL', 'URL for GitHub repository')
-check_env('PULL_REQUEST_NUMBER', 'Pull request ID from ${{ github.event.pull_request.number }}')
-check_env('BRANCH_NAME', 'Name of the current branch, ${{ github.head_ref || github.ref_name }} ')
-check_env('IS_PR', 'Set to true if this is a pull request, ${{ github.event_name == \'pull_request\' }}')
-check_env('TARGET', 'Target branch for the pull request, ${{ github.base_ref || github.target_branch }}')
+check_env('TOKEN', 'Token API')
+check_env('CAFILE', 'Path to CA (cert) file')
+check_env('REPO_URL', 'URL for repository')
+check_env('REQUEST_NUMBER', 'Pull/Merge request ID')
+check_env('BRANCH_NAME', 'Name of the current branch ')
+check_env('IS_PR', 'Set to true if this is a pull/merge request')
+check_env('TARGET', 'Target branch for the pull/merge request')
 
-#TODO: Add GITLAB equivalents
+
+#TODO: Change PR to Request Number
 
 
 if all_ok==0:
@@ -118,7 +118,7 @@ if result != 0:
 
 #Construct the properties
 if os.getenv('IS_PR') == 'pull_request':
-    property_pr_link = os.getenv('GITHUB_REPO_URL') + "/pull/" + os.getenv('PULL_REQUEST_NUMBER')
+    property_pr_link = os.getenv('REPO_URL') + "/pull/" + os.getenv('REQUEST_NUMBER')
 else:
     property_pr_link = "Not available"
         
