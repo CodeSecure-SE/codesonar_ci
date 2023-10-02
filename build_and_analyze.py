@@ -11,6 +11,7 @@ import subprocess
 import sys
 import urllib.parse
 from datetime import datetime
+import urllib.request
 
 
 debug = True
@@ -112,7 +113,9 @@ if debug:
     print(command)
 
 result = os.system(command) 
-time.sleep(10)
+
+# Close the connection, there is somethings an odd timing issue that happens
+webUrl = urllib.request.urlopen(os.getenv("CSONAR_HUB_URL")+"/command/close/"+target_project_aid)
 
 if result != 0:
     print ("Problem running build command")
