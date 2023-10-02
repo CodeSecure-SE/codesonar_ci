@@ -6,6 +6,7 @@
 
 
 import os
+import time
 import subprocess
 import sys
 import urllib.parse
@@ -111,6 +112,7 @@ if debug:
     print(command)
 
 result = os.system(command) 
+time.sleep(10)
 
 if result != 0:
     print ("Problem running build command")
