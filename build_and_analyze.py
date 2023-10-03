@@ -49,6 +49,7 @@ check_env('REQUEST_NUMBER', 'Pull/Merge request ID')
 check_env('BRANCH_NAME', 'Name of the current branch ')
 check_env('IS_PR', 'Set to true if this is a pull/merge request')
 check_env('TARGET', 'Target branch for the pull/merge request')
+check_env("COMMIT_HASH", "Commit hash")
 
 
 #TODO: Change PR to Request Number
@@ -114,9 +115,6 @@ if debug:
 
 result = os.system(command) 
 
-# Close the connection, there is somethings an odd timing issue that happens
-print(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid))
-webUrl = urllib.request.urlopen(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid))
 
 if result != 0:
     print ("Problem running build command")
@@ -142,6 +140,8 @@ if os.getenv('IS_PR') == 'pull_request':
         "&scope=" + urllib.parse.quote("aid:" + str(current_project_aid)) + "&swarnings=BJAW"
 else:
     property_new_findings = "Not available"
+
+property_commit_link = os.getenv('REPO_URL') + "/commit/" + os.getenv('COMMIT_HASH')
 
 # Close the connection, there is somethings an odd timing issue that happens
 print(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid))
