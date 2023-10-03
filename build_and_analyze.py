@@ -148,7 +148,7 @@ print(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid))
 try:
     webUrl = urllib.request.urlopen(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid))
 except urllib2.HTTPError:
-    #Do nothing, continue, page was already gone
+    print ("Exception caught, connection already closed continuing...")
     
 if debug:
     print("New findings: " + property_new_findings)
