@@ -96,7 +96,7 @@ if os.getenv('IS_PR') == 'pull_request':
     f.close()
  
     if debug:
-        print ("Target project analysis id: " + target_project_aid)
+        print ("Target project analysis id: " + str(target_project_aid))
 
 #Perform the actual build
 command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar build -clean " + \
@@ -115,7 +115,7 @@ if debug:
 result = os.system(command) 
 
 # Close the connection, there is somethings an odd timing issue that happens
-webUrl = urllib.request.urlopen(os.getenv("CSONAR_HUB_URL")+"/command/close/"+target_project_aid)
+webUrl = urllib.request.urlopen(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(target_project_aid))
 
 if result != 0:
     print ("Problem running build command")
