@@ -133,6 +133,7 @@ if debug:
 
 f = open (os.getenv("PROJECT_NAME") + ".prj_files/aid.txt", "r")
 current_project_aid = f.read()
+print(" Current project aid: " + str(current_project_aid))
 f.close()
 
 if os.getenv('IS_PR') == 'pull_request':
