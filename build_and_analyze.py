@@ -141,6 +141,10 @@ if os.getenv('IS_PR') == 'pull_request':
         "&scope=" + urllib.parse.quote("aid:" + str(current_project_aid)) + "&swarnings=BJAW"
 else:
     property_new_findings = "Not available"
+
+# Close the connection, there is somethings an odd timing issue that happens
+print(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid))
+webUrl = urllib.request.urlopen(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid))
     
 if debug:
     print("New findings: " + property_new_findings)
