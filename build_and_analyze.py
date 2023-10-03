@@ -147,7 +147,7 @@ property_commit_link = os.getenv('REPO_URL') + "/commit/" + os.getenv('COMMIT_HA
 print(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid))
 try:
     webUrl = urllib.request.urlopen(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid))
-except urllib2.HTTPError, e:
+except urllib2.HTTPError:
     #Do nothing, continue, page was already gone
     
 if debug:
