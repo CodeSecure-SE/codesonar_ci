@@ -11,7 +11,7 @@ import subprocess
 import sys
 import urllib.parse
 from datetime import datetime
-import urllib.request
+import urllib.request, urllib.error
 
 
 debug = True
@@ -147,7 +147,7 @@ property_commit_link = os.getenv('REPO_URL') + "/commit/" + os.getenv('COMMIT_HA
 print(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid))
 try:
     webUrl = urllib.request.urlopen(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid))
-except urllib.HTTPError:
+except urllib.error.HTTPError:
     print ("Exception caught, connection already closed continuing...")
     
 if debug:
