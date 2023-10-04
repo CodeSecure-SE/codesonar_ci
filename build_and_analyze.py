@@ -24,7 +24,7 @@ if (len(sys.argv) < 2):
     print("Usage: build_and_analyze.py <conf-file> <build-command>")
     sys.exit(1)
 conf_file = sys.argv[1]
-build_command = " ".join(sys.argv[2:])
+build_command = sys.argv[2:]
 
 print ("Build command: " + build_command)
 all_ok=1
@@ -113,8 +113,8 @@ command = [os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar",
                         "-project", os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME"),
                         "-name", datetime.now().strftime("%m/%d/%Y-%H:%M:%S"),
                         "-conf-file", conf_file,
-                        os.getenv("CSONAR_HUB_URL"),
-                        build_command]
+                        os.getenv("CSONAR_HUB_URL")] + build_command
+
 p = subprocess.Popen(command, shell=False)
 result = p.wait()
 if exit_code:
