@@ -102,7 +102,7 @@ if os.getenv('IS_PR') == 'pull_request':
 
 #Perform the actual build
 command = [os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar", 
-                      "buid",
+                      "build",
                       "-clean",
                       os.getenv("PROJECT_NAME"),
                       "-remote-archive", "/saas/*",
