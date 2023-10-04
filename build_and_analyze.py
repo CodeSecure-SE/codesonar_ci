@@ -12,6 +12,7 @@ import sys
 import urllib.parse
 from datetime import datetime
 import urllib.request, urllib.error
+import subprocess
 
 
 debug = True
@@ -100,20 +101,38 @@ if os.getenv('IS_PR') == 'pull_request':
         print ("Target project analysis id: " + str(target_project_aid))
 
 #Perform the actual build
-command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar build -clean " + \
-os.getenv("PROJECT_NAME") + " -remote-archive \"/saas/*\" -foreground " + \
-            " -auth password" + \
-            " -hubuser " + os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + \
-            " -project " + os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
-            " -name \"" + datetime.now().strftime("%m/%d/%Y-%H:%M:%S") +"\"" + \
-            " -conf-file " + conf_file + \
-            " " + os.getenv("CSONAR_HUB_URL") + " " + \
-            build_command
+command = [os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar", 
+                      "buid",
+                      "-clean",
+                      os.getenv("PROJECT_NAME"),
+                      "-remote-archive", "/saas/*",
+                        "-foreground",
+                        "-auth", "password", 
+                        "-hubuser", os.getenv('CSONAR_HUB_USER'),
+                        "-hubpwfile", CSONAR_HUB_PW_FILE,
+                        "-project", os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME"),
+                        "-name", datetime.now().strftime("%m/%d/%Y-%H:%M:%S"),
+                        "-conf-file", conf_file,
+                        os.getenv("CSONAR_HUB_URL"),
+                        build_command]
+p = subprocess.Popen(command, shell=False)
+result = p.wait()
+if exit_code:
+    print(f'codesonar build failed with {result}')
+    
+#command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar build -clean " + \
+#os.getenv("PROJECT_NAME") + " -remote-archive \"/saas/*\" -foreground " + \
+#           " -auth password" + \
+#            " -hubuser " + os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + \
+#            " -project " + os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
+#            " -name \"" + datetime.now().strftime("%m/%d/%Y-%H:%M:%S") +"\"" + \
+#            " -conf-file " + conf_file + \
+#            " " + os.getenv("CSONAR_HUB_URL") + " " + \
+#            build_command
+
 
 if debug:
     print(command)
-
-result = os.system(command) 
 
 
 if result != 0:
@@ -144,7 +163,7 @@ else:
 property_commit_link = os.getenv('REPO_URL') + "/commit/" + os.getenv('COMMIT_HASH')
 
 # Close the connection, there is somethings an odd timing issue that happens
-print(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid))
+print(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid)+"/")
 try:
     webUrl = urllib.request.urlopen(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid)+"/")
 except urllib.error.HTTPError:
