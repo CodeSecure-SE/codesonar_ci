@@ -163,10 +163,14 @@ property_commit_link = os.getenv('REPO_URL') + "/commit/" + os.getenv('COMMIT_HA
 
 # Close the connection, there is somethings an odd timing issue that happens
 print(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid)+"/")
-try:
-    webUrl = urllib.request.urlopen(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid)+"/")
-except urllib.error.HTTPError:
-    print ("Exception caught, connection already closed continuing...")
+
+os.system(os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -hubsuser" +  os.getenv('CSONAR_HUB_USER') +
+          " -hubpwfile " + CSONAR_HUB_PW_FILE + " " +os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid)+"/" )
+
+#try:
+#    webUrl = urllib.request.urlopen(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid)+"/")
+#except urllib.error.HTTPError:
+#    print ("Exception caught, connection already closed continuing...")
     
 if debug:
     print("New findings: " + property_new_findings)
