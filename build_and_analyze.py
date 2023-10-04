@@ -161,16 +161,6 @@ else:
 
 property_commit_link = os.getenv('REPO_URL') + "/commit/" + os.getenv('COMMIT_HASH')
 
-# Close the connection, there is somethings an odd timing issue that happens
-print(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid)+"/")
-
-os.system(os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -hubsuser " +  os.getenv('CSONAR_HUB_USER') +
-          " -hubpwfile " + CSONAR_HUB_PW_FILE + " " +os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid)+"/" )
-
-#try:
-#    webUrl = urllib.request.urlopen(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid)+"/")
-#except urllib.error.HTTPError:
-#    print ("Exception caught, connection already closed continuing...")
     
 if debug:
     print("New findings: " + property_new_findings)
@@ -180,17 +170,17 @@ commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + 
             " -auth password" + \
             " -hubuser " + os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + \
             " -project " + os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
-            " -property New_findings \"" + property_new_findings + "\""\
-            " -property PR_link \"" +  property_pr_link + "\"" \
-            " -property target_branch \"" + os.getenv("TARGET") + "\"" \
-            " -property commit_link \"" + property_commit_link + "\"" \
-            " -property branch_name \"" + os.getenv("BRANCH_NAME") + "\"" \
+            " -property New_findings \"" + property_new_findings + "\"" +\
+            " -property PR_link \"" +  property_pr_link + "\"" +\
+            " -property target_branch \"" + os.getenv("TARGET") + "\"" +\
+            " -property commit_link \"" + property_commit_link + "\"" +\
+            " -property branch_name \"" + os.getenv("BRANCH_NAME") + "\"" +\
             " -name \"" + datetime.now().strftime("%m/%d/%Y-%H:%M:%S") +"\"" + \
             " -conf-file " + conf_file + \
             " " + os.getenv("CSONAR_HUB_URL") 
 
 if debug:
-    print(command)
+    print(commandstr)
 
 result = os.system(commandstr) 
 if result != 0:
