@@ -118,8 +118,6 @@ command = [os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar",
 
 p = subprocess.Popen(command, shell=False)
 result = p.wait()
-if exit_code:
-    print(f'codesonar build failed with {result}')
     
 #command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar build -clean " + \
 #os.getenv("PROJECT_NAME") + " -remote-archive \"/saas/*\" -foreground " + \
