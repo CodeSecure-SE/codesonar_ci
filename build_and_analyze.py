@@ -72,7 +72,7 @@ target_project_aid = 0
 # If this is a PR/MR, find the analysis-id of the latest analysis on the target branch
 if os.getenv('IS_PR') == 'pull_request':
     link = "{\"limit\":1,\"orderBy\":[{\"analysisId\":\"DESCENDING\"}],\"columns\":[\"analysisId\"]}"
-    query = "\"branch.name\"=\"" + os.getenv("TARGET") + "\"state=\"Finished\""
+    query = "\"branch_name\"=\"" + os.getenv("TARGET") + "\"state=\"Finished\""
     
     command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth password -hubuser " + \
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
@@ -178,8 +178,9 @@ command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + \
             " -project " + os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
             " -property New_findings \"" + property_new_findings + "\""\
             " -property PR_link \"" +  property_pr_link + "\"" \
-            " -property target_branch \"" + os.getenv("BRANCH_NAME") + "\"" \
+            " -property target_branch \"" + os.getenv("$TARGET") + "\"" \
             " -property commit_link \"" + property_commit_link + "\"" \
+            " -property branch_name \"" + os.getenv("BRANCH_NAME") + "\"" \
             " -name \"" + datetime.now().strftime("%m/%d/%Y-%H:%M:%S") +"\"" + \
             " -conf-file " + conf_file + \
             " " + os.getenv("CSONAR_HUB_URL") 
