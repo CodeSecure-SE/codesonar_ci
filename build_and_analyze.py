@@ -146,7 +146,7 @@ property_commit_link = os.getenv('REPO_URL') + "/commit/" + os.getenv('COMMIT_HA
 # Close the connection, there is somethings an odd timing issue that happens
 print(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid))
 try:
-    webUrl = urllib.request.urlopen(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid))
+    webUrl = urllib.request.urlopen(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid)+"/")
 except urllib.error.HTTPError:
     print ("Exception caught, connection already closed continuing...")
     
