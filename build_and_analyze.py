@@ -24,6 +24,7 @@ if (len(sys.argv) < 2):
     print("Usage: build_and_analyze.py <conf-file> <build-command>")
     sys.exit(1)
 conf_file = sys.argv[1]
+build_command=[]
 build_command = sys.argv[2:]
 
 print ("Build command: " + build_command)
