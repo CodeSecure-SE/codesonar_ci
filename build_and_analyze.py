@@ -164,7 +164,7 @@ property_commit_link = os.getenv('REPO_URL') + "/commit/" + os.getenv('COMMIT_HA
 # Close the connection, there is somethings an odd timing issue that happens
 print(os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid)+"/")
 
-os.system(os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -hubsuser" +  os.getenv('CSONAR_HUB_USER') +
+os.system(os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -hubsuser " +  os.getenv('CSONAR_HUB_USER') +
           " -hubpwfile " + CSONAR_HUB_PW_FILE + " " +os.getenv("CSONAR_HUB_URL")+"/command/close/"+str(current_project_aid)+"/" )
 
 #try:
@@ -175,8 +175,8 @@ os.system(os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -hubsuser" 
 if debug:
     print("New findings: " + property_new_findings)
             
-command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + \
-            os.getenv("PROJECT_NAME") + " -remote-archive \"/saas/*\" -foreground " + \
+commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + \
+     os.getenv("PROJECT_NAME") + " -remote-archive \"/saas/*\" -foreground " +  \
             " -auth password" + \
             " -hubuser " + os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + \
             " -project " + os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
@@ -192,34 +192,34 @@ command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + \
 if debug:
     print(command)
 
-result = os.system(command) 
+result = os.system(commandstr) 
 if result != 0:
     print ("Problem running analyze command")
     sys.exit(1)             
 
 # Download the new findings results in SARIF, if it is a pull request
 if os.getenv('IS_PR') == 'pull_request':
-    command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth password -hubuser " + \
+    commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth password -hubuser " + \
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
         "\"" +os.getenv('CSONAR_HUB_URL') + "/warning_detail_search.sarif?query=" + \
         urllib.parse.quote("aid:"+str(current_project_aid) + " DIFFERENCE aid:" + str(target_project_aid)) + \
         "&scope=" + urllib.parse.quote("aid:" + str(current_project_aid)) + "&swarnings=BJAW\"" + \
         " -o - > warnings.sarif"
     if debug: 
-        print ("Command: " + command)
+        print ("Command: " + commandstr)
         
-    result = os.system(command)
+    result = os.system(commandstr)
     
     if result != 0:
         print ("Error retrieving SARIF file")
         sys.exit(1)
         
     #Convert to summary
-    command = os.getenv("CSONAR_CSHOME")+"/codesonar/bin/cspython " + \
+    commandstr = os.getenv("CSONAR_CSHOME")+"/codesonar/bin/cspython " + \
         "/opt/codesonar-github/sarif_summary.py warnings.sarif " + \
         os.getenv("CSONAR_HUB_URL") + " " + \
         os.getenv("PROJECT_NAME") + " > warnings.md"
-    result=os.system(command)
+    result=os.system(commandstr)
     
     if result != 0:
         print ("Error converting SARIF file to markdown")
