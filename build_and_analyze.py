@@ -27,7 +27,7 @@ conf_file = sys.argv[1]
 build_command=[]
 build_command = sys.argv[2:]
 
-print ("Build command: " + build_command)
+
 all_ok=1
 
 def check_env(s, t):
