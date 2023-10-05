@@ -61,8 +61,6 @@ if all_ok==0:
     print("Exiting, not all variables have been set!")
     sys.exit(1)
 
-if (os.getenv('TARGET') == ""):
-    os.setenv('TARGET', 'None')
 
 # create hub credentials
 CSONAR_HUB_PW_FILE = os.path.join(os.getcwd(), 'hub_pw')
@@ -172,7 +170,12 @@ os.system(os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth passw
     
 if debug:
     print("New findings: " + property_new_findings)
-            
+
+if os.getenv('TARGET') == "":
+   targetStr="None"
+else: 
+    targetStr=os.getenv('TARGET')
+
 commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + \
      os.getenv("PROJECT_NAME") + " -remote-archive \"/saas/*\" -foreground " +  \
             " -auth password" + \
@@ -180,7 +183,7 @@ commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + 
             " -project " + os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
             " -property New_findings \"" + property_new_findings + "\"" +\
             " -property PR_link \"" +  property_pr_link + "\"" +\
-            " -property target_branch \"" + os.getenv("TARGET") + "\"" +\
+            " -property target_branch \"" + targetStr + "\"" +\
             " -property commit_link \"" + property_commit_link + "\"" +\
             " -property branch_name \"" + os.getenv("BRANCH_NAME") + "\"" +\
             " -name \"" + namestr +"\"" + \
