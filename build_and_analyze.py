@@ -100,6 +100,7 @@ if os.getenv('IS_PR') == 'pull_request':
  
     if debug:
         print ("Target project analysis id: " + str(target_project_aid))
+namestr = datetime.now().strftime("%m/%d/%Y-%H:%M:%S")
 
 #Perform the actual build
 command = [os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar", 
@@ -112,7 +113,7 @@ command = [os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar",
                         "-hubuser", os.getenv('CSONAR_HUB_USER'),
                         "-hubpwfile", CSONAR_HUB_PW_FILE,
                         "-project", os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME"),
-                        "-name", datetime.now().strftime("%m/%d/%Y-%H:%M:%S"),
+                        "-name", namestr,
                         "-conf-file", conf_file,
                         os.getenv("CSONAR_HUB_URL")] + build_command
 
@@ -175,7 +176,7 @@ commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + 
             " -property target_branch \"" + os.getenv("TARGET") + "\"" +\
             " -property commit_link \"" + property_commit_link + "\"" +\
             " -property branch_name \"" + os.getenv("BRANCH_NAME") + "\"" +\
-            " -name \"" + datetime.now().strftime("%m/%d/%Y-%H:%M:%S") +"\"" + \
+            " -name \"" + namestr +"\"" + \
             " -conf-file " + conf_file + \
             " " + os.getenv("CSONAR_HUB_URL") 
 
