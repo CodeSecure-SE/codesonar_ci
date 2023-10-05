@@ -168,7 +168,7 @@ os.system(os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth passw
 if debug:
     print("New findings: " + property_new_findings)
 
-print ("Target ==" + os.getenv('TARGET') + "==")
+
 if os.getenv('TARGET') == "":
    targetStr="None"
 else: 
