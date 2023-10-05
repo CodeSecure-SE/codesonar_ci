@@ -54,9 +54,6 @@ check_env('TARGET', 'Target branch for the pull/merge request')
 check_env("COMMIT_HASH", "Commit hash")
 
 
-#TODO: Change PR to Request Number
-
-
 if all_ok==0:
     print("Exiting, not all variables have been set!")
     sys.exit(1)
@@ -170,6 +167,7 @@ os.system(os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth passw
     
 if debug:
     print("New findings: " + property_new_findings)
+
 
 if os.getenv('TARGET') == "":
    targetStr="None"
