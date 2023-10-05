@@ -61,6 +61,9 @@ if all_ok==0:
     print("Exiting, not all variables have been set!")
     sys.exit(1)
 
+if (os.getenv('TARGET') == ""):
+    os.setenv('TARGET', 'None')
+
 # create hub credentials
 CSONAR_HUB_PW_FILE = os.path.join(os.getcwd(), 'hub_pw')
 f = open (CSONAR_HUB_PW_FILE, "w")
