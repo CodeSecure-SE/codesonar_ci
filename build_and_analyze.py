@@ -162,6 +162,10 @@ else:
 
 property_commit_link = os.getenv('REPO_URL') + "/commit/" + os.getenv('COMMIT_HASH')
 
+#Make sure the connection is closed
+os.system(os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth password -hubuser " + \
+        os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
+        os.getenv('CSONAR_HUB_URL') + "/command/close/" + str(current_project_aid) + "/")
     
 if debug:
     print("New findings: " + property_new_findings)
