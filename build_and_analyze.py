@@ -68,7 +68,9 @@ f.close()
 target_project_aid = 0
 
 # If this is a PR/MR, find the analysis-id of the latest analysis on the target branch
+print("IS_PR: " +os.getenv('IS_PR'))   
 if os.getenv('IS_PR') == 'pull_request':
+    # TODO: Dont think this is working for GitLab
     link = "{\"limit\":1,\"orderBy\":[{\"analysisId\":\"DESCENDING\"}],\"columns\":[\"analysisId\"]}"
     query = "\"branch_name\"=\"" + os.getenv("TARGET") + "\"state=\"Finished\""
     
@@ -198,6 +200,7 @@ if result != 0:
 
 # Download the new findings results in SARIF, if it is a pull request
 if os.getenv('IS_PR') == 'pull_request':
+    # Pull just the changes
     commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth password -hubuser " + \
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
         "\"" +os.getenv('CSONAR_HUB_URL') + "/warning_detail_search.sarif?query=" + \
@@ -223,8 +226,16 @@ if os.getenv('IS_PR') == 'pull_request':
     if result != 0:
         print ("Error converting SARIF file to markdown")
         sys.exit(1)
-        
-
+else:
+    # Pull everything as a summary
+    commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar dump_warnings.py -auth password -hubuser " + \
+        os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
+        "\"" +os.getenv('CSONAR_HUB_URL') + " --project-file " + os.getenv("PROJECT_NAME") + ".prj --sarif --sarif-detail brief  -o warnings.sarif" 
+    result=os.system(commandstr)
+    
+    if result != 0:
+        print ("Error Pulling data from HUB")
+        sys.exit(1)
 
 # remove hub credentials
 if not debug:
