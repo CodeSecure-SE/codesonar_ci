@@ -69,7 +69,7 @@ target_project_aid = 0
 
 # If this is a PR/MR, find the analysis-id of the latest analysis on the target branch
 print("IS_PR: " +os.getenv('IS_PR'))   
-if os.getenv('IS_PR') == 'pull_request':
+if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_event':
     # TODO: Dont think this is working for GitLab
     link = "{\"limit\":1,\"orderBy\":[{\"analysisId\":\"DESCENDING\"}],\"columns\":[\"analysisId\"]}"
     query = "\"branch_name\"=\"" + os.getenv("TARGET") + "\"state=\"Finished\""
@@ -140,7 +140,7 @@ if result != 0:
     sys.exit(1)
 
 #Construct the properties
-if os.getenv('IS_PR') == 'pull_request':
+if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_event':
     property_pr_link = os.getenv('REPO_URL') + "/pull/" + os.getenv('REQUEST_NUMBER')
 else:
     property_pr_link = "Not available"
@@ -153,7 +153,7 @@ current_project_aid = f.read()
 print(" Current project aid: " + str(current_project_aid))
 f.close()
 
-if os.getenv('IS_PR') == 'pull_request':
+if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_event':
     property_new_findings = os.getenv('CSONAR_HUB_URL') +"/search.html?query=" + \
         urllib.parse.quote("aid:"+str(current_project_aid) + " DIFFERENCE aid:" + str(target_project_aid)) + \
         "&scope=" + urllib.parse.quote("aid:" + str(current_project_aid)) + "&swarnings=BJAW"
@@ -199,7 +199,7 @@ if result != 0:
     sys.exit(1)             
 
 # Download the new findings results in SARIF, if it is a pull request
-if os.getenv('IS_PR') == 'pull_request':
+if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_event':
     # Pull just the changes
     commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth password -hubuser " + \
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
