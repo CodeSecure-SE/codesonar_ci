@@ -119,17 +119,6 @@ command = [os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar",
 
 p = subprocess.Popen(command, shell=False)
 result = p.wait()
-    
-#command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar build -clean " + \
-#os.getenv("PROJECT_NAME") + " -remote-archive \"/saas/*\" -foreground " + \
-#           " -auth password" + \
-#            " -hubuser " + os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + \
-#            " -project " + os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
-#            " -name \"" + datetime.now().strftime("%m/%d/%Y-%H:%M:%S") +"\"" + \
-#            " -conf-file " + conf_file + \
-#            " " + os.getenv("CSONAR_HUB_URL") + " " + \
-#            build_command
-
 
 if debug:
     print(command)
