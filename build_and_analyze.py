@@ -142,6 +142,8 @@ if result != 0:
 #Construct the properties
 if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_event':
     property_pr_link = os.getenv('REPO_URL') + "/pull/" + os.getenv('REQUEST_NUMBER')
+elif os.getenv('IS_PR') == 'merge_request_event':
+    property_pr_link = os.getenv('REPO_URL') + "/merge_requests/" + os.getenv('REQUEST_NUMBER')
 else:
     property_pr_link = "Not available"
         
