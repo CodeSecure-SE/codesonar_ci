@@ -159,3 +159,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 1628.csv
+.sarif.out.swp
+1607.sarif
+Misra2012-mapping-broad.csv
+sarif.out

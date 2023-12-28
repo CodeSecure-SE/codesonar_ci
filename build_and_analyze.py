@@ -221,8 +221,13 @@ else:
     # Pull everything as a summary
     commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar dump_warnings.py -auth password -hubuser " + \
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
-        "--hub " + os.getenv('CSONAR_HUB_URL') + " --project-file " + os.getenv("PROJECT_NAME") + ".prj --sarif --sarif-detail brief  -o warnings.sarif" 
+        "--hub " + os.getenv('CSONAR_HUB_URL') + " --project-file " + os.getenv("PROJECT_NAME") + ".prj --visible-warnings \"active and not clustered\" --sarif --sarif-detail brief  -o warnings.sarif" 
     result=os.system(commandstr)
+
+    # this is for the MISRA mapping in the SARIF file if desired
+    commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get   -auth password -hubuser " + \
+        os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
+        "https://partnerdemo.codesonar.com/install/codesonar/doc/html/WarningClasses/Misra2012-mapping-broad.csv"
     
     if result != 0:
         print ("Error Pulling data from HUB")

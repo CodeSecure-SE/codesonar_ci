@@ -29,6 +29,7 @@ if (not os.path.isfile(locFile)):
     sys.exit(1)
 
 # With code from Alex Hermeling
+significanceTypes = ["Security", "Reliability", "Redundancy", "Style"]
 
 with open(warningsFile,"r") as csv_file:
     csv_reader = csv.reader(csv_file)
@@ -39,8 +40,8 @@ with open(warningsFile,"r") as csv_file:
 
     filePaths = list(set(allFilePaths))
     filePaths.remove("file path")
-    significanceTypes = list(set(allSignificance))
-    significanceTypes.remove("significance")
+    
+    
     def significanceNum(path, significance):
         count = 0
         for i in range(len(completeFile)):
@@ -57,8 +58,16 @@ with open(warningsFile,"r") as csv_file:
         filePathAndSig.append([filePaths[i], list(allTempSig)])
         allTempSig.clear()
 
+totals = [0,0,0,0,0,0]
+
+
+for i in range(len(filePathAndSig)):
+    for j in range(len(significanceTypes)):
+        totals[j] += filePathAndSig[i][1][j][1]
+
+
 csv_file.close()
-print("Warnings read from "+warningsFile)     
+
 locCount = {}
 totalLoc = 0
 with open(locFile,"r") as loc_file:
@@ -68,4 +77,10 @@ with open(locFile,"r") as loc_file:
         locCount[row[0]] = int(row[2])
         totalLoc += int(row[2])
 
-print( "Lines of code (" + str(totalLoc) + ") read from "+locFile)
+
+print("\n\n#CodeSecure SAST Score\n")
+for i in range(len(significanceTypes)):
+    print("**"+significanceTypes[i] + "**: {:.1f}".format(totals[i]/(totalLoc/1000)))
+
+print("\n\nTotal warnings: " + str(len(completeFile)-1))
+print( "Lines of code:  " + str(totalLoc) )
