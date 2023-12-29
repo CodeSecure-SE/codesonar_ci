@@ -205,6 +205,7 @@ if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_
     
     if result != 0:
         print ("Error retrieving SARIF file")
+        print (commandstr)
         sys.exit(1)
         
     #Convert to summary
@@ -216,16 +217,18 @@ if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_
     
     if result != 0:
         print ("Error converting SARIF file to markdown")
+        print (commandstr)
         sys.exit(1)
 else:
     # Pull everything as a summary
     commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar dump_warnings.py -auth password -hubuser " + \
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
-        "--hub " + os.getenv('CSONAR_HUB_URL') + " --project-file " + os.getenv("PROJECT_NAME") + ".prj --visible-warnings \"active and not clustered --sarif --sarif-detail brief  -o warnings.sarif" 
+        "--hub " + os.getenv('CSONAR_HUB_URL') + " --project-file " + os.getenv("PROJECT_NAME") + ".prj --visible-warnings \"active not clustered --sarif --sarif-detail brief  -o warnings.sarif" 
     result=os.system(commandstr)
     
     if result != 0:
         print ("Error Pulling data from HUB")
+        print (commandstr)
         sys.exit(1)
 
     # this is for the MISRA mapping in the SARIF file if desired
@@ -236,6 +239,7 @@ result=os.system(commandstr)
     
 if result != 0:
     print ("Error pulling the Misra mapping file")
+    print (commandstr)
     sys.exit(1)
 
 # remove hub credentials
