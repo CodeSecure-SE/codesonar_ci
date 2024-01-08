@@ -195,9 +195,9 @@ if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_
     # Pull just the changes
     commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth password -hubuser " + \
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
-        " " +os.getenv('CSONAR_HUB_URL') + "/warning_detail_search.sarif?filter=\"active not clustered\"&query=" + \
+        " \"" +os.getenv('CSONAR_HUB_URL') + "/warning_detail_search.sarif?filter=" + urllib.parse.quote("\"active not clustered\"") + "&query=" + \
         urllib.parse.quote("aid:"+str(current_project_aid) + " DIFFERENCE aid:" + str(target_project_aid)) + \
-        "&scope=" + urllib.parse.quote("aid:" + str(current_project_aid)) + "&swarnings=BJAW" + \
+        "&scope=" + urllib.parse.quote("aid:" + str(current_project_aid)) + "&swarnings=BJAW\"" + \
         " -o - > warnings.sarif"
     if debug: 
         print ("Command: " + commandstr)
