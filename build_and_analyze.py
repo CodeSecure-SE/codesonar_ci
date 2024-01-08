@@ -179,6 +179,7 @@ commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + 
             " -property branch_name \"" + os.getenv("BRANCH_NAME") + "\"" +\
             " -name \"" + namestr +"\"" + \
             " -conf-file " + conf_file + \
+            " -srcroot ." + \
             " " + os.getenv("CSONAR_HUB_URL") 
 
 if debug:
