@@ -279,34 +279,33 @@ if not debug:
 # Last thing to do is to add CWE or MISRA namings into the SARIF file
 if MISRA or CWE:
 
+    if not os.path.isfile("warnings.sarif"):
+        print ("File not found: warnings.sarif")
+        sys.exit(1) 
 
-if not os.path.isfile("warnings.sarif"):
-    print ("File not found: warnings.sarif")
-    sys.exit(1) 
+    if not os.path.isfile(transcodeFile):
+        print ("File not found: "+transcodeFile)
+        sys.exit(1)
 
-if not os.path.isfile(transcodeFile):
-    print ("File not found: "+transcodeFile)
-    sys.exit(1)
-
-# Read in the csv file
-with open(mappingFile, "r") as csv_file:
-    csv_reader = csv.reader(csv_file)
-    next(csv_reader)
-    mapping = list(csv_reader)  
-#    print (mapping[0][0] + "-" + mapping[0][8])
-
+    # Read in the csv file
+    with open(mappingFile, "r") as csv_file:
+        csv_reader = csv.reader(csv_file)
+        next(csv_reader)
+        mapping = list(csv_reader)  
+    #    print (mapping[0][0] + "-" + mapping[0][8])
 
 
-# Read in the SARIF file and print to outfile
-outFile = open("warnings-translate.sarif", "w")
-with open("warnings.sarif", "r") as sarif_file:
-    for line in sarif_file:
-        for i in range(len(mapping)):
-            if (MISRA and mapping[i][8] in line):
-                line = line.replace(mapping[i][8], mapping[i][0] + "-" + mapping[i][8])
-            if (CWE and mapping[i][5] in line):
-                line = line.replace(mapping[i][5], mapping[i][0] + "-" + mapping[i][5])
-        outFile.write (line)
 
-outFile.close()
-        
+    # Read in the SARIF file and print to outfile
+    outFile = open("warnings-translate.sarif", "w")
+    with open("warnings.sarif", "r") as sarif_file:
+        for line in sarif_file:
+            for i in range(len(mapping)):
+                if (MISRA and mapping[i][8] in line):
+                    line = line.replace(mapping[i][8], mapping[i][0] + "-" + mapping[i][8])
+                if (CWE and mapping[i][5] in line):
+                    line = line.replace(mapping[i][5], mapping[i][0] + "-" + mapping[i][5])
+            outFile.write (line)
+
+    outFile.close()
+            
