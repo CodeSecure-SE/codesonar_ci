@@ -288,7 +288,7 @@ if MISRA or CWE:
         sys.exit(1)
 
     # Read in the csv file
-    with open(mappingFile, "r") as csv_file:
+    with open(transcodeFile, "r") as csv_file:
         csv_reader = csv.reader(csv_file)
         next(csv_reader)
         mapping = list(csv_reader)  
