@@ -13,6 +13,8 @@ import urllib.parse
 from datetime import datetime
 import urllib.request, urllib.error
 import subprocess
+import csv
+
 
 
 debug = True
