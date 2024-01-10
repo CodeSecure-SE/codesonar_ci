@@ -30,11 +30,11 @@ if (len(sys.argv) < 2):
     print("Usage: build_and_analyze.py [options] <conf-file> <build-command>")
     sys.exit(1)
 
-if ('-cwe' in sys.argv[1]):
+if ('-cwe' in sys.argv):
     CWE=True
     sys.argv.remove('-cwe')
 
-if ('-misra' in sys.argv[1]):
+if ('-misra' in sys.argv):
     MISRA=True
     sys.argv.remove('-misra')
 
