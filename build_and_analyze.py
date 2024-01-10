@@ -331,9 +331,7 @@ if CWE:
     with open(sarifFile, "r") as sarif_file:
         for line in sarif_file:
             for i in range(len(mapping)):
-                if (MISRA and mapping[i][8] in line):
-                    line = line.replace(mapping[i][8], mapping[i][0] + "-" + mapping[i][8])
-                if (CWE and mapping[i][5] in line):
+                if (mapping[i][5] in line):
                     line = line.replace(mapping[i][5], mapping[i][0] + "-" + mapping[i][5])
             outFile.write (line)
 
