@@ -13,16 +13,31 @@ import urllib.parse
 from datetime import datetime
 import urllib.request, urllib.error
 import subprocess
+import csv
+
 
 
 debug = True
+
+CWE = False
+MISRA = False
+transcodeFile = ""
 
 # first check if we have all the required arguments
 
 if (len(sys.argv) < 2):
     print("Insufficient parameters, exiting")
-    print("Usage: build_and_analyze.py <conf-file> <build-command>")
+    print("Usage: build_and_analyze.py [options] <conf-file> <build-command>")
     sys.exit(1)
+
+if ('-cwe' in sys.argv):
+    CWE=True
+    sys.argv.remove('-cwe')
+
+if ('-misra' in sys.argv):
+    MISRA=True
+    sys.argv.remove('-misra')
+
 conf_file = sys.argv[1]
 build_command=[]
 build_command = sys.argv[2:]
@@ -232,17 +247,105 @@ else:
         print (commandstr)
         sys.exit(1)
 
-    # this is for the MISRA mapping in the SARIF file if desired
-commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get   -auth password -hubuser " + \
-    os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
-    "https://partnerdemo.codesonar.com/install/codesonar/doc/html/WarningClasses/Misra2012-mapping-broad.csv"
-result=os.system(commandstr)
     
 if result != 0:
-    print ("Error pulling the Misra mapping file")
+    print ("Error pulling the CWE mapping file")
     print (commandstr)
     sys.exit(1)
 
+
+# Last thing to do is to add CWE or MISRA namings into the SARIF file
+if MISRA:
+      # this is for the MISRA mapping in the SARIF file if desired
+    commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get   -auth password -hubuser " + \
+        os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
+        "https://partnerdemo.codesonar.com/install/codesonar/doc/html/WarningClasses/Misra2012-mapping-broad.csv"
+    result=os.system(commandstr)
+    transcodeFile = "Misra2012-mapping-broad.csv"
+    
+    if result != 0:
+        print ("Error pulling the Misra mapping file")
+        print (commandstr)
+        sys.exit(1)
+
+    if not os.path.isfile("warnings.sarif"):
+        print ("File not found: warnings.sarif")
+        sys.exit(1) 
+
+    if not os.path.isfile(transcodeFile):
+        print ("File not found: "+transcodeFile)
+        sys.exit(1)
+
+    # Read in the csv file
+    with open(transcodeFile, "r") as csv_file:
+        csv_reader = csv.reader(csv_file)
+        next(csv_reader)
+        mapping = list(csv_reader)  
+    #    print (mapping[0][0] + "-" + mapping[0][8])
+
+
+
+    # Read in the SARIF file and print to outfile
+    outFile = open("warnings-MISRA.sarif", "w")
+    with open("warnings.sarif", "r") as sarif_file:
+        for line in sarif_file:
+            for i in range(len(mapping)):
+                if (mapping[i][8] in line):
+                    line = line.replace(mapping[i][8], mapping[i][0] + "-" + mapping[i][8])
+            outFile.write (line)
+
+    outFile.close()
+
+if CWE:
+    # this is for the CWE mapping in the SARIF file if desired
+    commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get   -auth password -hubuser " + \
+        os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
+        "https://partnerdemo.codesonar.com/install/codesonar/doc/html/WarningClasses/CWE-mapping.csv"
+    result=os.system(commandstr)
+    transcodeFile = "CWE-mapping.csv"
+
+    sarifFile = "warnings.sarif"
+    
+    if os.path.isfile("warnings-MISRA.sarif"):
+        sarifFile = "warnings-MISRA.sarif"
+    
+    if not os.path.isfile(sarifFile):
+        print ("File not found: " + sarifFile)
+        sys.exit(1) 
+
+    if not os.path.isfile(transcodeFile):
+        print ("File not found: "+transcodeFile)
+        sys.exit(1)
+
+    # Read in the csv file
+    with open(transcodeFile, "r") as csv_file:
+        csv_reader = csv.reader(csv_file)
+        next(csv_reader)
+        mapping = list(csv_reader)  
+    #    print (mapping[0][0] + "-" + mapping[0][8])
+
+
+
+    # Read in the SARIF file and print to outfile
+    outFile = open("warnings-CWE.sarif", "w")
+    with open(sarifFile, "r") as sarif_file:
+        for line in sarif_file:
+            for i in range(len(mapping)):
+                if (mapping[i][5] in line):
+                    line = line.replace(mapping[i][5], mapping[i][0] + "-" + mapping[i][5])
+            outFile.write (line)
+
+    outFile.close()
+
+#Finally, rename the files as needed
+if CWE:
+    os.rename("warnings-CWE.sarif", "warnings-translate.sarif")
+
+if MISRA and not CWE:
+    os.rename("warnings-MISRA.sarif", "warnings-translate.sarif")
+
+    
+            
 # remove hub credentials
 if not debug:
     os.remove(CSONAR_HUB_PW_FILE)
