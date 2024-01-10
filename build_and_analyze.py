@@ -266,7 +266,7 @@ if CWE:
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
         "https://partnerdemo.codesonar.com/install/codesonar/doc/html/WarningClasses/CWE-mapping.csv"
     result=os.system(commandstr)
-    transcodeFile = "CWE-mapping-broad.csv"
+    transcodeFile = "CWE-mapping.csv"
 
     
 if result != 0:
