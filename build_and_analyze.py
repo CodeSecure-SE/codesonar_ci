@@ -264,7 +264,7 @@ if CWE:
     # this is for the CWE mapping in the SARIF file if desired
     commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get   -auth password -hubuser " + \
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
-        "https://partnerdemo.codesonar.com/install/codesonar/doc/html/WarningClasses/CWE-mapping-broad.csv"
+        "https://partnerdemo.codesonar.com/install/codesonar/doc/html/WarningClasses/CWE-mapping.csv"
     result=os.system(commandstr)
     transcodeFile = "CWE-mapping-broad.csv"
 
