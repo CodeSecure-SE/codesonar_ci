@@ -28,6 +28,10 @@ transcodeFile = ""
 if (len(sys.argv) < 2):
     print("Insufficient parameters, exiting")
     print("Usage: build_and_analyze.py [options] <conf-file> <build-command>")
+    print("Script outputs:")
+    print("  - warnings.sarif: SARIF file with the warnings in PR (if triggered by a PR), or all visible warnings")
+    print("  - warnings.md: Markdown related to the above")
+    print("  - warnings-translate.sarif: SARIF file with CWE/MISRA warnings (only if one or more of the options -cwe or -misra are used)") -
     sys.exit(1)
 
 if ('-cwe' in sys.argv):
