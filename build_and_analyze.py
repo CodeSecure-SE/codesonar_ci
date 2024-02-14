@@ -42,6 +42,11 @@ if ('-misra' in sys.argv):
     MISRA=True
     sys.argv.remove('-misra')
 
+uploadFlag = '-remote-archive \"/saas/*\"'
+if ('-noupload' in sys.argv):
+    uploadFlag = ''
+    sys.argv.remove('-noupload')
+
 conf_file = sys.argv[1]
 build_command=[]
 build_command = sys.argv[2:]
@@ -122,11 +127,25 @@ if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_
 namestr = datetime.now().strftime("%m/%d/%Y-%H:%M:%S")
 
 #Perform the actual build
-command = [os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar", 
+if (uploadFlag == ""):
+    command = [os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar", 
                       "build",
                       "-clean",
                       os.getenv("PROJECT_NAME"),
-                      "-remote-archive", "/saas/*",
+                        "-foreground",
+                        "-auth", "password", 
+                        "-hubuser", os.getenv('CSONAR_HUB_USER'),
+                        "-hubpwfile", CSONAR_HUB_PW_FILE,
+                        "-project", os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME"),
+                        "-name", namestr,
+                        "-conf-file", conf_file,
+                        os.getenv("CSONAR_HUB_URL")] + build_command
+else:
+       command = [os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar", 
+                      "build",
+                      "-clean",
+                      os.getenv("PROJECT_NAME"),
+                        "-remote-archive",  "\"/saas/*\"",
                         "-foreground",
                         "-auth", "password", 
                         "-hubuser", os.getenv('CSONAR_HUB_USER'),
@@ -187,7 +206,7 @@ else:
     targetStr=os.getenv('TARGET')
 
 commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + \
-     os.getenv("PROJECT_NAME") + " -remote-archive \"/saas/*\" -foreground " +  \
+     os.getenv("PROJECT_NAME") + uploadFlag + " -foreground " +  \
             " -auth password" + \
             " -hubuser " + os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + \
             " -project " + os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
