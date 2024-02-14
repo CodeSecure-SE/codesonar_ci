@@ -21,16 +21,16 @@ jobs:
       TOKEN: "${{ secrets.GITHUB_TOKEN }}"
       API_URL: https://api.github.com
       REQUEST_NUMBER: ${{ github.event.pull_request.number }}
-      ROOT_TREE: "OSS-Projects/numpy-GitHub" 
-      PROJECT_NAME: "curl"
+      ROOT_TREE: "OSS-Projects/codesonar_ci" 
+      PROJECT_NAME: "codesonar_ci"
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
       CSONAR_HUB_URL: "https://duck.dyndns.org:7340" 
       CSONAR_HUB_USER: "${{ secrets.CSONAR_HUB_USER }}"
       CSONAR_HUB_PASSWORD: "${{ secrets.CSONAR_HUB_PASS }}"
       CSONAR_CSHOME: /opt/codesonar
-      CS_USER_HOME: /__w/numpy/numpy
+      CS_USER_HOME: /__w/codesonar_ci/codesonar_ci
       COMMIT_HASH: ${{ github.sha }}
-      REPO_URL: "https://github.com/CodeSecure-SE/numpy"    # the github.repositoryUrl is not an http-link.
+      REPO_URL: "https://github.com/CodeSecure-SE/codesonar_ci"    # the github.repositoryUrl is not an http-link.
       TARGET: ${{ github.base_ref }}
       IS_PR: ${{ github.event_name }}
     steps:
@@ -47,7 +47,7 @@ jobs:
           ref: main
           path: cso-scripts
       - name: Build and Analyze
-        run: python3 cso-scripts/build_and_analyze.py  codesonar.conf codesonar python_scan.py numpy/*.py numpy/**/*.py
+        run: python3 cso-scripts/build_and_analyze.py  codesonar.conf codesonar python_scan.py *.py
       - name: Upload SARIF to GitHub #Use this if you do not have GitHub Enterprise
         if: ${{ github.event.pull_request }}
         uses: actions/upload-artifact@v3
