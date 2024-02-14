@@ -59,8 +59,7 @@ def check_env(s, t):
     if os.getenv(s) is None:
         print("Missing " + s + " environment variable, should be set to " + t)
         all_ok=0   
-    
-    
+
 # checking environment variables
 check_env('CSONAR_HUB_URL', 'URL for CodeSonar HUB') 
 check_env('CSONAR_HUB_USER', 'Username for CodeSonar HUB')
@@ -97,22 +96,22 @@ if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_
     # TODO: Dont think this is working for GitLab
     link = "{\"limit\":1,\"orderBy\":[{\"analysisId\":\"DESCENDING\"}],\"columns\":[\"analysisId\"]}"
     query = "\"branch_name\"=\"" + os.getenv("TARGET") + "\"state=\"Finished\""
-    
+
     command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth password -hubuser " + \
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
         os.getenv('CSONAR_HUB_URL') + "/analysis_search.csv?sanlgrid_json=" + \
         urllib.parse.quote(link) + "\&query=" + urllib.parse.quote(query) + " -o - > result"
-        
+
     if Debug: 
         print ("Command: " + command)
-    
+
     result = os.system(command)
-    
- 
+
+
     if result != 0:
         print ("Error retrieving analysis id")
         sys.exit(1)
-    
+
     f = open("result", "r")
     resultFile = f.read()
     if len(resultFile.splitlines()) < 2:
@@ -121,7 +120,7 @@ if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_
     else: 
         target_project_aid = resultFile.splitlines()[1]
     f.close()
- 
+
     if Debug:
         print ("Target project analysis id: " + str(target_project_aid))
 namestr = datetime.now().strftime("%m/%d/%Y-%H:%M:%S")
@@ -173,7 +172,7 @@ elif os.getenv('IS_PR') == 'merge_request_event':
     property_pr_link = os.getenv('REPO_URL') + "/merge_requests/" + os.getenv('REQUEST_NUMBER')
 else:
     property_pr_link = "Not available"
-        
+
 if Debug:
             print("PR Link: " + property_pr_link)
 
@@ -195,7 +194,7 @@ property_commit_link = os.getenv('REPO_URL') + "/commit/" + os.getenv('COMMIT_HA
 os.system(os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth password -hubuser " + \
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
         os.getenv('CSONAR_HUB_URL') + "/command/close/" + str(current_project_aid) + "/")
-    
+
 if Debug:
     print("New findings: " + property_new_findings)
 
@@ -239,21 +238,21 @@ if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_
         " -o - > warnings.sarif"
     if Debug: 
         print ("Command: " + commandstr)
-        
+
     result = os.system(commandstr)
-    
+
     if result != 0:
         print ("Error retrieving SARIF file")
         print (commandstr)
         sys.exit(1)
-        
+
     #Convert to summary
     commandstr = os.getenv("CSONAR_CSHOME")+"/codesonar/bin/cspython " + \
         "/opt/codesonar-github/sarif_summary.py warnings.sarif " + \
         os.getenv("CSONAR_HUB_URL") + " " + \
         os.getenv("PROJECT_NAME") + " > warnings.md"
     result=os.system(commandstr)
-    
+
     if result != 0:
         print ("Error converting SARIF file to markdown")
         print (commandstr)
@@ -264,13 +263,13 @@ else:
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
         "--hub " + os.getenv('CSONAR_HUB_URL') + " --project-file " + os.getenv("PROJECT_NAME") + ".prj --visible-warnings \"active not clustered\" --sarif -o warnings.sarif" 
     result=os.system(commandstr)
-    
+
     if result != 0:
         print ("Error Pulling data from HUB")
         print (commandstr)
         sys.exit(1)
 
-    
+
 if result != 0:
     print ("Error pulling the CWE mapping file")
     print (commandstr)
@@ -285,7 +284,7 @@ if MISRA:
         "https://partnerdemo.codesonar.com/install/codesonar/doc/html/WarningClasses/Misra2012-mapping-broad.csv"
     result=os.system(commandstr)
     transcodeFile = "Misra2012-mapping-broad.csv"
-    
+
     if result != 0:
         print ("Error pulling the Misra mapping file")
         print (commandstr)
@@ -328,10 +327,10 @@ if CWE:
     transcodeFile = "CWE-mapping.csv"
 
     sarifFile = "warnings.sarif"
-    
+
     if os.path.isfile("warnings-MISRA.sarif"):
         sarifFile = "warnings-MISRA.sarif"
-    
+
     if not os.path.isfile(sarifFile):
         print ("File not found: " + sarifFile)
         sys.exit(1) 
@@ -367,8 +366,8 @@ if CWE:
 if MISRA and not CWE:
     os.rename("warnings-MISRA.sarif", "warnings-translate.sarif")
 
-    
-            
+
+
 # remove hub credentials
 if not Debug:
     os.remove(CSONAR_HUB_PW_FILE)
