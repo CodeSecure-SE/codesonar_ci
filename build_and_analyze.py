@@ -43,7 +43,7 @@ if ('-misra' in sys.argv):
     sys.argv.remove('-misra')
 
 uploadFlag = '-remote-archive \"/saas/*\"'
-if ('-noupload' in sys.argv)
+if ('-noupload' in sys.argv):
     uploadFlag = ''
     sys.argv.remove('-noupload')
 
