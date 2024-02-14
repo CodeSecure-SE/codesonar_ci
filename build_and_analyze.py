@@ -34,7 +34,7 @@ if (len(sys.argv) < 2):
     print("  - warnings-translate.sarif: SARIF file with CWE/MISRA warnings (only if one or more of the options -cwe or -misra are used)") 
     sys.exit(1)
 
-if ('-cwe' in sys.argv):
+if '-cwe' in sys.argv:
     CWE=True
     sys.argv.remove('-cwe')
 
