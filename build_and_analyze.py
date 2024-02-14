@@ -17,7 +17,7 @@ import csv
 
 
 
-debug = True
+Debug = True
 
 CWE = False
 MISRA = False
@@ -103,7 +103,7 @@ if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_
         os.getenv('CSONAR_HUB_URL') + "/analysis_search.csv?sanlgrid_json=" + \
         urllib.parse.quote(link) + "\&query=" + urllib.parse.quote(query) + " -o - > result"
         
-    if debug: 
+    if Debug: 
         print ("Command: " + command)
     
     result = os.system(command)
@@ -122,7 +122,7 @@ if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_
         target_project_aid = resultFile.splitlines()[1]
     f.close()
  
-    if debug:
+    if Debug:
         print ("Target project analysis id: " + str(target_project_aid))
 namestr = datetime.now().strftime("%m/%d/%Y-%H:%M:%S")
 
@@ -158,7 +158,7 @@ else:
 p = subprocess.Popen(command, shell=False)
 result = p.wait()
 
-if debug:
+if Debug:
     print(command)
 
 
@@ -174,7 +174,7 @@ elif os.getenv('IS_PR') == 'merge_request_event':
 else:
     property_pr_link = "Not available"
         
-if debug:
+if Debug:
             print("PR Link: " + property_pr_link)
 
 f = open (os.getenv("PROJECT_NAME") + ".prj_files/aid.txt", "r")
@@ -196,7 +196,7 @@ os.system(os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth passw
         os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
         os.getenv('CSONAR_HUB_URL') + "/command/close/" + str(current_project_aid) + "/")
     
-if debug:
+if Debug:
     print("New findings: " + property_new_findings)
 
 
@@ -220,7 +220,7 @@ commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + 
             " -srcroot ." + \
             " " + os.getenv("CSONAR_HUB_URL") 
 
-if debug:
+if Debug:
     print(commandstr)
 
 result = os.system(commandstr) 
@@ -237,7 +237,7 @@ if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_
         urllib.parse.quote("aid:"+str(current_project_aid) + " DIFFERENCE aid:" + str(target_project_aid)) + \
         "&scope=" + urllib.parse.quote("aid:" + str(current_project_aid)) + "&swarnings=BJAW\"" + \
         " -o - > warnings.sarif"
-    if debug: 
+    if Debug: 
         print ("Command: " + commandstr)
         
     result = os.system(commandstr)
@@ -370,5 +370,5 @@ if MISRA and not CWE:
     
             
 # remove hub credentials
-if not debug:
+if not Debug:
     os.remove(CSONAR_HUB_PW_FILE)
