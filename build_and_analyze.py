@@ -206,7 +206,7 @@ else:
     targetStr=os.getenv('TARGET')
 
 commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + \
-     os.getenv("PROJECT_NAME") + uploadFlag + " -foreground " +  \
+     os.getenv("PROJECT_NAME") + " " + uploadFlag + " -foreground " +  \
             " -auth password" + \
             " -hubuser " + os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + \
             " -project " + os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
