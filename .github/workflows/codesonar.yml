@@ -14,8 +14,8 @@ jobs:
     container:
       image: codesecurese/numpy-cso-builder:8.1b0
       credentials:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
     env:
       CAFILE: ".github/github.cert.pem" 
       TOKEN: "${{ secrets.GITHUB_TOKEN }}"
