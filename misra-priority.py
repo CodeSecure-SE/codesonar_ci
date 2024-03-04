@@ -53,24 +53,25 @@ for r in mapping:
         cso_mapping[r['CodeSonar Class Name']] = r['Category']
     else: 
         if (cso_mapping[r['CodeSonar Class Name']] == "Required" \
-            or cso_mapping[r['CodeSonar Class Name']] == "Advisory") \
-            and r['Category'] == "Mandatory":
-                cso_mapping[r['CodeSonar Class Name']] = "Mandatory"
+                or cso_mapping[r['CodeSonar Class Name']] == "Advisory") \
+                and r['Category'] == "Mandatory":
+            cso_mapping[r['CodeSonar Class Name']] = "Mandatory"
         elif cso_mapping[r['CodeSonar Class Name']] == "Advisory" \
-             and r['Category'] == "Required":
-                 cso_mapping[r['CodeSonar Class Name']] = "Required"
+                 and r['Category'] == "Required":
+             cso_mapping[r['CodeSonar Class Name']] = "Required"
             
 # Step 3: Read in the configuration file line by line and translate
 with (open(sys.argv[1], "r")) as config_file:
     for line in config_file:
         line = line.rstrip()
-        translated = 0
-        for r in cso_mapping:
+        TRANSLATED = 0
+        for r in cso_mapping.items():
             if r in line:
-                new_line = line.replace(" allow ", " allow priority:=\"" + priorities[cso_mapping[r]] + "\" ")
+                new_line = line.replace(" allow ", " allow priority:=\"" + \
+                                        priorities[cso_mapping[r]] + "\" ")
                 print (new_line)
-                translated = 1
+                TRANSLATED = 1
 
-        if not translated:
-                print(line)
+        if not TRANSLATED:
+            print(line)
         
