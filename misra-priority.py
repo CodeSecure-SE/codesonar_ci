@@ -26,17 +26,17 @@ priorities['Mandatory'] = "P0_Mandatory"
 priorities['Required'] = "P1_Required"
 priorities['Advisory'] = "P2_Advisory"
 
-if ('-hub' in sys.argv):
+if '-hub' in sys.argv:
     HUB = sys.argv[sys.argv.index('-hub') + 1]
     sys.argv.remove('-hub')
     sys.argv.remove(HUB)
 
-if ('-hubuser' in sys.argv):
+if '-hubuser' in sys.argv:
     HUBUSER = sys.argv[sys.argv.index('-hubuser') + 1]
     sys.argv.remove('-hubuser')
     sys.argv.remove(HUBUSER)
 
-if ('-auth' in sys.argv):
+if '-auth' in sys.argv:
     AUTH = sys.argv[sys.argv.index('-auth') + 1]
     sys.argv.remove('-auth')
     sys.argv.remove(AUTH)
@@ -73,17 +73,17 @@ for r in mapping:
             cso_mapping[r['CodeSonar Class Name']] = "Mandatory"
         elif cso_mapping[r['CodeSonar Class Name']] == "Advisory" \
                  and r['Category'] == "Required":
-             cso_mapping[r['CodeSonar Class Name']] = "Required"
+            cso_mapping[r['CodeSonar Class Name']] = "Required"
             
 # Step 3: Read in the configuration file line by line and translate
-with (open(sys.argv[1], "r")) as config_file:
+with (open(sys.argv[1], encoding="utf8", mode="r")) as config_file:
     for line in config_file:
         line = line.rstrip()
         TRANSLATED = 0
-        for r in cso_mapping.keys():
-            if r in line:
+        for cl, prio in cso_mapping.items():
+            if cl in line:
                 new_line = line.replace(" allow ", " allow priority:=\"" + \
-                                        priorities[cso_mapping[r]] + "\" ")
+                                        priorities[prio] + "\" ")
                 print (new_line)
                 TRANSLATED = 1
 
