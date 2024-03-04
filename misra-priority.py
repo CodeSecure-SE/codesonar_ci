@@ -17,7 +17,8 @@ locale.setlocale(locale.LC_ALL, '')
 
 # Configuration paramaters
 HUB = "https://partnerdemo.codesonar.com"
-HUBUSER = "mhermeling"
+HUBUSER = "testuser"
+AUTH = "password"
 
 # This is the mapping of the priorities.
 priorities = {}
@@ -25,6 +26,20 @@ priorities['Mandatory'] = "P0_Mandatory"
 priorities['Required'] = "P1_Required"
 priorities['Advisory'] = "P2_Advisory"
 
+if ('-hub' in sys.argv):
+    HUB = sys.argv[sys.argv.index('-hub') + 1]
+    sys.argv.remove('-hub')
+    sys.argv.remove(HUB)
+
+if ('-hubuser' in sys.argv):
+    HUBUSER = sys.argv[sys.argv.index('-hubuser') + 1]
+    sys.argv.remove('-hubuser')
+    sys.argv.remove(HUBUSER)
+
+if ('-auth' in sys.argv):
+    AUTH = sys.argv[sys.argv.index('-auth') + 1]
+    sys.argv.remove('-auth')
+    sys.argv.remove(AUTH)
 
 
 if len(sys.argv) < 2:
@@ -33,7 +48,7 @@ if len(sys.argv) < 2:
 
 
 # Step 1: Download the mapping file from the hub
-COMMAND = "codesonar get -HUBUSER " + HUBUSER + " -auth certificate " + \
+COMMAND = "codesonar get -HUBUSER " + HUBUSER + " -auth " + AUTH + " " + \
         HUB + "/install/codesonar/doc/html/WarningClasses/Misra2012-mapping.csv"
 
 print ("Getting MISRA C 2012 mapping file from the hub")
@@ -65,7 +80,7 @@ with (open(sys.argv[1], "r")) as config_file:
     for line in config_file:
         line = line.rstrip()
         TRANSLATED = 0
-        for r in cso_mapping.items():
+        for r in cso_mapping.keys():
             if r in line:
                 new_line = line.replace(" allow ", " allow priority:=\"" + \
                                         priorities[cso_mapping[r]] + "\" ")
