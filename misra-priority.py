@@ -1,16 +1,21 @@
 import sys
 import os
 import csv
+import locale
+# use user's default settings
+locale.setlocale(locale.LC_ALL, '')
 
-# This script takes in a configuration file with MISRA WARNING_FILTER and adds priority:= to each rule
+
+# This script takes in a configuration file with MISRA WARNING_FILTER and 
+# adds priority:= to each rule
 # it downloads the configuration file from the hub
 #
 # Requirements:
 # - codesonar in the path
 
 # Configuration paramaters
-hub = "https://partnerdemo.codesonar.com"
-hubuser = "mhermeling"
+HUB = "https://partnerdemo.codesonar.com"
+HUBUSER = "mhermeling"
 
 # This is the mapping of the priorities.
 priorities = {}
@@ -21,15 +26,16 @@ priorities['Advisory'] = "P2_Advisory"
 
 
 if len(sys.argv) < 2:
-    print ("Usage: python misra-priority.py <config-file> > <new-config-file>")
+    print ("Usage: python misra-priority.py <config-file> ")
     sys.exit(1)
 
 
 # Step 1: Download the mapping file from the hub
-command = "codesonar get -hubuser " + hubuser + " -auth certificate " + hub + "/install/codesonar/doc/html/WarningClasses/Misra2012-mapping.csv"
+COMMAND = "codesonar get -HUBUSER " + HUBUSER + " -auth certificate " + \
+        HUB + "/install/codesonar/doc/html/WarningClasses/Misra2012-mapping.csv"
 
 print ("Getting MISRA C 2012 mapping file from the hub")
-os.system(command)
+os.system(COMMAND)
 
 with open("Misra2012-mapping.csv", "r") as csv_file:
     csv_reader = csv.DictReader(csv_file)
@@ -59,7 +65,7 @@ with (open(sys.argv[1], "r")) as config_file:
                 new_line = line.replace(" allow ", " allow priority:=\"" + priorities[cso_mapping[r]] + "\" ")
                 print (new_line)
                 translated = 1
-                
+
         if not translated:
                 print(line)
         
