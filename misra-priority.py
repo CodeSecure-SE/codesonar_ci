@@ -2,6 +2,8 @@ import sys
 import os
 import csv
 import locale
+
+
 # use user's default settings
 locale.setlocale(locale.LC_ALL, '')
 
@@ -37,8 +39,8 @@ COMMAND = "codesonar get -HUBUSER " + HUBUSER + " -auth certificate " + \
 print ("Getting MISRA C 2012 mapping file from the hub")
 os.system(COMMAND)
 
-encoding = io.text_encoding(encoding)
-with open("Misra2012-mapping.csv", encoding=encoding, "r") as csv_file:
+
+with open("Misra2012-mapping.csv", encoding="utf8", mode="r") as csv_file:
     csv_reader = csv.DictReader(csv_file)
     next(csv_reader)
     mapping = list(csv_reader)
@@ -50,12 +52,13 @@ for r in mapping:
     if not r['CodeSonar Class Name'] in cso_mapping:
         cso_mapping[r['CodeSonar Class Name']] = r['Category']
     else: 
-        if (cso_mapping[r['CodeSonar Class Name']] == "Required" 
-               or cso_mapping[r['CodeSonar Class Name']] == "Advisory")
-               and r['Category'] == "Mandatory":
-            cso_mapping[r['CodeSonar Class Name']] = "Mandatory"
-        elif cso_mapping[r['CodeSonar Class Name']] == "Advisory" and r['Category'] == "Required":
-            cso_mapping[r['CodeSonar Class Name']] = "Required"
+        if (cso_mapping[r['CodeSonar Class Name']] == "Required" \
+            or cso_mapping[r['CodeSonar Class Name']] == "Advisory") \
+            and r['Category'] == "Mandatory":
+                cso_mapping[r['CodeSonar Class Name']] = "Mandatory"
+        elif cso_mapping[r['CodeSonar Class Name']] == "Advisory" \
+             and r['Category'] == "Required":
+                 cso_mapping[r['CodeSonar Class Name']] = "Required"
             
 # Step 3: Read in the configuration file line by line and translate
 with (open(sys.argv[1], "r")) as config_file:
