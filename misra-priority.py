@@ -36,8 +36,6 @@ with open("Misra2012-mapping.csv", "r") as csv_file:
     next(csv_reader)
     mapping = list(csv_reader)
 
-#for r in mapping:
-#    print ("Rule: " + r['CodeSonar Class Name'] + ":" + r['Category'])
 
 #Step 2: Calculate the highest priroty per CodeSonar rule
 cso_mapping = {}
@@ -54,9 +52,14 @@ for r in mapping:
 # Step 3: Read in the configuration file line by line and translate
 with (open(sys.argv[1], "r")) as config_file:
     for line in config_file:
-        line.strip()
+        line = line.rstrip()
+        translated = 0
         for r in cso_mapping:
             if r in line:
                 new_line = line.replace(" allow ", " allow priority:=\"" + priorities[cso_mapping[r]] + "\" ")
                 print (new_line)
+                translated = 1
+                
+        if not translated:
+                print(line)
         
