@@ -6,7 +6,7 @@ import locale
 locale.setlocale(locale.LC_ALL, '')
 
 
-# This script takes in a configuration file with MISRA WARNING_FILTER and 
+# This script takes in a configuration file with MISRA WARNING_FILTER and
 # adds priority:= to each rule
 # it downloads the configuration file from the hub
 #
@@ -37,7 +37,8 @@ COMMAND = "codesonar get -HUBUSER " + HUBUSER + " -auth certificate " + \
 print ("Getting MISRA C 2012 mapping file from the hub")
 os.system(COMMAND)
 
-with open("Misra2012-mapping.csv", "r") as csv_file:
+encoding = io.text_encoding(encoding)
+with open("Misra2012-mapping.csv", encoding=encoding, "r") as csv_file:
     csv_reader = csv.DictReader(csv_file)
     next(csv_reader)
     mapping = list(csv_reader)
@@ -46,15 +47,15 @@ with open("Misra2012-mapping.csv", "r") as csv_file:
 cso_mapping = {}
 
 for r in mapping:
-        if not r['CodeSonar Class Name'] in cso_mapping:
-            cso_mapping[r['CodeSonar Class Name']] = r['Category']
-        else: 
-            if (cso_mapping[r['CodeSonar Class Name']] == "Required" 
-                    or cso_mapping[r['CodeSonar Class Name']] == "Advisory")
-                    and r['Category'] == "Mandatory":
-                cso_mapping[r['CodeSonar Class Name']] = "Mandatory"
-            elif cso_mapping[r['CodeSonar Class Name']] == "Advisory" and r['Category'] == "Required":
-                cso_mapping[r['CodeSonar Class Name']] = "Required"
+    if not r['CodeSonar Class Name'] in cso_mapping:
+        cso_mapping[r['CodeSonar Class Name']] = r['Category']
+    else: 
+        if (cso_mapping[r['CodeSonar Class Name']] == "Required" 
+               or cso_mapping[r['CodeSonar Class Name']] == "Advisory")
+               and r['Category'] == "Mandatory":
+            cso_mapping[r['CodeSonar Class Name']] = "Mandatory"
+        elif cso_mapping[r['CodeSonar Class Name']] == "Advisory" and r['Category'] == "Required":
+            cso_mapping[r['CodeSonar Class Name']] = "Required"
             
 # Step 3: Read in the configuration file line by line and translate
 with (open(sys.argv[1], "r")) as config_file:
