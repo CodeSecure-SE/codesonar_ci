@@ -42,7 +42,6 @@ with open("Misra2012-mapping.csv", "r") as csv_file:
     next(csv_reader)
     mapping = list(csv_reader)
 
-
 #Step 2: Calculate the highest priroty per CodeSonar rule
 cso_mapping = {}
 
@@ -50,7 +49,9 @@ for r in mapping:
         if not r['CodeSonar Class Name'] in cso_mapping:
             cso_mapping[r['CodeSonar Class Name']] = r['Category']
         else: 
-            if (cso_mapping[r['CodeSonar Class Name']] == "Required" or cso_mapping[r['CodeSonar Class Name']] == "Advisory") and r['Category'] == "Mandatory":
+            if (cso_mapping[r['CodeSonar Class Name']] == "Required" 
+                    or cso_mapping[r['CodeSonar Class Name']] == "Advisory")
+                    and r['Category'] == "Mandatory":
                 cso_mapping[r['CodeSonar Class Name']] = "Mandatory"
             elif cso_mapping[r['CodeSonar Class Name']] == "Advisory" and r['Category'] == "Required":
                 cso_mapping[r['CodeSonar Class Name']] = "Required"
