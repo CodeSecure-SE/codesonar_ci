@@ -22,9 +22,9 @@ AUTH = "password"
 
 # This is the mapping of the priorities.
 priorities = {}
-priorities['Mandatory'] = "P0_Mandatory"
-priorities['Required'] = "P1_Required"
-priorities['Advisory'] = "P2_Advisory"
+priorities['Mandatory'] = "Mandatory"
+priorities['Required'] = "Required"
+priorities['Advisory'] = "Advisory"
 
 if '-hub' in sys.argv:
     HUB = sys.argv[sys.argv.index('-hub') + 1]
@@ -51,7 +51,6 @@ if len(sys.argv) < 2:
 COMMAND = "codesonar get -HUBUSER " + HUBUSER + " -auth " + AUTH + " " + \
         HUB + "/install/codesonar/doc/html/WarningClasses/Misra2012-mapping.csv"
 
-print ("Getting MISRA C 2012 mapping file from the hub")
 os.system(COMMAND)
 
 
@@ -81,8 +80,9 @@ with (open(sys.argv[1], encoding="utf8", mode="r")) as config_file:
         line = line.rstrip()
         TRANSLATED = 0
         for cl, prio in cso_mapping.items():
-            if cl in line:
-                new_line = line.replace(" allow ", " allow priority:=\"" + \
+            if (cl in line and "allow" in line):
+                print (line)
+                new_line = line.replace(" allow ", " priority:=\"" + \
                                         priorities[prio] + "\" ")
                 print (new_line)
                 TRANSLATED = 1
