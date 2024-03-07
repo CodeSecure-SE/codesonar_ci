@@ -13,7 +13,7 @@
     "type": "shell",
     "label": "Python: CodeSonar analyze",
     "command": [
-        "codesonar analyze codesonar_ci -hubuser ${config:codesonar.hubUser} -auth certificate -name ${input:codesonarAnalysisName} -conf-file codesonar.conf -project OSS-Projects/codesonar_ci/developers/${config:codesonar.hubUser}  ${config:codesonar.hubAddress} codesonar python_scan.py *.py"
+        "codesonar analyze codesonar_ci -hubuser ${config:codesonar.hubUser} -auth certificate -name ${input:codesonarAnalysisName} -conf-file codesonar.conf -project OSS-Projects/codesonar_ci/developers/${config:codesonar.hubUser}  ${config:codesonar.hubAddress} codesonar  python_scan.py -include-sources \"*.py\""
     ],
     "group": "build",
     "detail": "builder: make",
