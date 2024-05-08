@@ -21,6 +21,9 @@ Debug = True
 
 CWE = False
 MISRA = False
+GitLab = False
+GitHub = False
+
 transcodeFile = ""
 
 # first check if we have all the required arguments
@@ -62,6 +65,7 @@ def check_env(s, t):
 
 # checking for GitLab variables
 if os.getenv('CI_MERGE_REQUEST_IID') is not None:
+    GitLab=True
     os.environ['REQUEST_NUMBER'] = os.getenv('CI_MERGE_REQUEST_IID')
     os.environ['BRANCH_NAME'] = os.getenv('CI_COMMIT_REF_NAME')
     os.environ['IS_PR'] = os.getenv('CI_PIPELINE_SOURCE')
@@ -377,6 +381,18 @@ if MISRA and not CWE:
     os.rename("warnings-MISRA.sarif", "warnings-translate.sarif")
 
 
+#Last step: generate the json that GitLab wants
+if GitLab:
+        commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/cspython /opt/codesonar-gitlab/codesonar-sarif2sast/sarif2sast.py --sarif warnings.sarif --output gl-sast-report.json" + \
+           "--codesonar-url " + os.getenv("CSONAR_HUB_URL") + " --analysis-id " + str(current_project_aid)
+        result=os.system(commandstr)
+        print (commandstr)
+
+        if result!= 0:
+            print ("Error converting SARIF file to GitLab json")
+            print (commandstr)
+            sys.exit(1
+       
 
 # remove hub credentials
 if not Debug:
