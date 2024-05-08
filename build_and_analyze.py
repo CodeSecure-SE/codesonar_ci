@@ -60,6 +60,15 @@ def check_env(s, t):
         print("Missing " + s + " environment variable, should be set to " + t)
         all_ok=0   
 
+# checking for GitLab variables
+if os.getenv('CI_MERGE_REQUEST_IID') is not None:
+    os.setenv('REQUEST_NUMBER', os.getenv('CI_MERGE_REQUEST_IID'))
+    os.setenv('BRANCH_NAME', os.getenv('CI_COMMIT_REF_NAME'))
+    os.setenv('IS_PR', os.getenv('CI_PIPELINE_SOURCE'))
+    os.setenv('TARGET', os.getenv('CI_MERGE_REQUEST_TARGET_BRANCH_NAME'))
+    os.setenv('COMMIT_HASH', os.getenv('CI_COMMIT_SHA'))
+
+
 # checking environment variables
 check_env('CSONAR_HUB_URL', 'URL for CodeSonar HUB') 
 check_env('CSONAR_HUB_USER', 'Username for CodeSonar HUB')
