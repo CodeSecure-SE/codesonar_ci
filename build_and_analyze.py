@@ -391,7 +391,7 @@ if GitLab:
         if result!= 0:
             print ("Error converting SARIF file to GitLab json")
             print (commandstr)
-            sys.exit(1
+            sys.exit(1)
        
 
 # remove hub credentials
