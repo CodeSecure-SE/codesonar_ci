@@ -62,11 +62,11 @@ def check_env(s, t):
 
 # checking for GitLab variables
 if os.getenv('CI_MERGE_REQUEST_IID') is not None:
-    os.setenv('REQUEST_NUMBER', os.getenv('CI_MERGE_REQUEST_IID'))
-    os.setenv('BRANCH_NAME', os.getenv('CI_COMMIT_REF_NAME'))
-    os.setenv('IS_PR', os.getenv('CI_PIPELINE_SOURCE'))
-    os.setenv('TARGET', os.getenv('CI_MERGE_REQUEST_TARGET_BRANCH_NAME'))
-    os.setenv('COMMIT_HASH', os.getenv('CI_COMMIT_SHA'))
+    os.environ['REQUEST_NUMBER'], os.getenv('CI_MERGE_REQUEST_IID'))
+    os.environ['BRANCH_NAME'], os.getenv('CI_COMMIT_REF_NAME'))
+    os.environ['IS_PR'], os.getenv('CI_PIPELINE_SOURCE'))
+    os.environ['TARGET'], os.getenv('CI_MERGE_REQUEST_TARGET_BRANCH_NAME'))
+    os.environ['COMMIT_HASH'], os.getenv('CI_COMMIT_SHA'))
 
 
 # checking environment variables
