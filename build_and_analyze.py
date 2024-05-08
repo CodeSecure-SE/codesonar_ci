@@ -67,6 +67,7 @@ if os.getenv('CI_MERGE_REQUEST_IID') is not None:
     os.environ['IS_PR'] = os.getenv('CI_PIPELINE_SOURCE')
     os.environ['TARGET'] = os.getenv('CI_MERGE_REQUEST_TARGET_BRANCH_NAME')
     os.environ['COMMIT_HASH'] = os.getenv('CI_COMMIT_SHA')
+    os.environ['TOKEN'] = os.getenv('CI_JOB_TOKEN')
 
 
 # checking environment variables
@@ -77,7 +78,7 @@ check_env('CSONAR_CSHOME', 'Path to CodeSonar installation')
 check_env('ROOT_TREE', 'Path to the project-tree in the CodeSonar HUB')
 check_env('PROJECT_NAME', 'Name of the project in the CodeSonar HUB')
 check_env('TOKEN', 'Token API')
-check_env('CAFILE', 'Path to CA (cert) file')
+#check_env('CAFILE', 'Path to CA (cert) file')
 check_env('REPO_URL', 'URL for repository')
 check_env('REQUEST_NUMBER', 'Pull/Merge request ID')
 check_env('BRANCH_NAME', 'Name of the current branch ')
