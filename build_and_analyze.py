@@ -66,6 +66,7 @@ def check_env(s, t):
 # checking for GitLab variables
 if os.getenv("CI_MERGE_REQUEST_IID") is not None:
     GitLab=True
+    print("Reading GitLab environment variables")
     if os.getenv("REQUEST_NUMBER") is None:
         os.environ['REQUEST_NUMBER'] = os.getenv('CI_MERGE_REQUEST_IID')
     if os.getenv("BRANCH_NAME") is None:
