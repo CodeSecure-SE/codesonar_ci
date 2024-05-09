@@ -89,9 +89,7 @@ if os.getenv("GITHUB_ACTION") is not None:
             os.environ['REQUEST_NUMBER'] = ref.split("/")[0]
         else:
             os.environ['REQUEST_NUMBER'] = "None"
-        print("Debug: " + ref)
-        print("Debug: REQUEST_NUMBER: " + os.getenv('REQUEST_NUMBER'))
-
+  
     if "BRANCH_NAME" not in os.environ:
         if os.getenv('GITHUB_HEAD_REF') is not None:
             os.environ['BRANCH_NAME'] = os.getenv('GITHUB_HEAD_REF')
