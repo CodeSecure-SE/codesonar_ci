@@ -86,10 +86,10 @@ if os.getenv("GITHUB_ACTION") is not None:
     if "REQUEST_NUMBER" not in os.environ:
         ref = os.getenv('GITHUB_REF_NAME')
         if ref.endswith("/merge"):
-            os.environ['REQUEST_NUMBER'] = ref.split("/")[1]
+            os.environ['REQUEST_NUMBER'] = ref.split("/")[0]
         else:
             os.environ['REQUEST_NUMBER'] = "None"
-        
+        print("Debug: " + ref)
         print("Debug: REQUEST_NUMBER: " + os.getenv('REQUEST_NUMBER'))
 
     if "BRANCH_NAME" not in os.environ:
