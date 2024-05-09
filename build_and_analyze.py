@@ -64,7 +64,7 @@ def check_env(s, t):
         all_ok=0   
 
 # checking for GitLab variables
-if os.getenv('CI_MERGE_REQUEST_IID') is not None:
+if "CI_MERGE_REQUEST_IID" in os.environ:
     GitLab=True
     if "REQUEST_NUMBER" not in os.environ:
         os.environ['REQUEST_NUMBER'] = os.getenv('CI_MERGE_REQUEST_IID')
@@ -80,19 +80,19 @@ if os.getenv('CI_MERGE_REQUEST_IID') is not None:
         os.environ['TOKEN'] = os.getenv('CI_JOB_TOKEN')
 
 # checking for GitHub variables
-if os.getenv('GITHUB_ACTION') is not None:
+if "GITHUB_ACTION" in os.environ":
     GitHub=True
-    if os.environ['REQUEST_NUMBER'] is None:
+    if "REQUEST_NUMBER" not in os.environ:
         os.environ['REQUEST_NUMBER'] = os.getenv('CI_MERGE_REQUEST_IID')
-    if os.environ['BRANCH_NAME'] is None:
+    if "BRANCH_NAME" not in os.environ:
         os.environ['BRANCH_NAME'] = os.getenv('CI_COMMIT_REF_NAME')
-    if os.environ['IS_PR'] is None:
+    if "IS_PR'" not in os.environ:
            os.environ['IS_PR'] = os.getenv('CI_PIPELINE_SOURCE')
-    if os.environ['TARGET'] is None:
+    if "TARGET" not in os.environ:
         os.environ['TARGET'] = os.getenv('CI_MERGE_REQUEST_TARGET_BRANCH_NAME')
-    if os.environ['COMMIT_HASH'] is None:
+    if "COMMIT_HASH" not in os.environ:
         os.environ['COMMIT_HASH'] = os.getenv('CI_COMMIT_SHA')
-    if os.environ['TOKEN'] is None:
+    if "TOKEN" not in os.environ:
         os.environ['TOKEN'] = os.getenv('CI_JOB_TOKEN')    
 
 
