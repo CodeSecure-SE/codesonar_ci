@@ -383,7 +383,7 @@ if MISRA and not CWE:
 
 #Last step: generate the json that GitLab wants
 if GitLab:
-        commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/cspython /opt/codesonar-gitlab/codesonar-sarif2sast/sarif2sast.py --sarif warnings.sarif --output gl-sast-report.json" + \
+        commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/cspython /opt/codesonar-gitlab/codesonar-sarif2sast/sarif2sast.py --sarif warnings.sarif --output gl-sast-report.json " + \
            "--codesonar-url " + os.getenv("CSONAR_HUB_URL") + " --analysis-id " + str(current_project_aid)
         result=os.system(commandstr)
         print (commandstr)
