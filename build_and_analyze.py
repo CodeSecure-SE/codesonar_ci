@@ -84,17 +84,27 @@ if os.getenv("CI_COMMIT_SHA") is not None:
 if os.getenv("GITHUB_ACTION") is not None:
     GitHub=True
     if "REQUEST_NUMBER" not in os.environ:
-        os.environ['REQUEST_NUMBER'] = os.getenv('CI_MERGE_REQUEST_IID')
+        ref = os.getenv('GITHUB_REF_NAME')
+        if ref.endswith("/merge"):
+            os.environ['REQUEST_NUMBER'] = ref.split("/")[1]
+        else:
+            os.environ['REQUEST_NUMBER'] = "None"
+        
+        print("Debug: REQUEST_NUMBER: " + os.getenv('REQUEST_NUMBER'))
+
     if "BRANCH_NAME" not in os.environ:
-        os.environ['BRANCH_NAME'] = os.getenv('CI_COMMIT_REF_NAME')
+        if os.getenv('GITHUB_HEAD_REF') is not None:
+            os.environ['BRANCH_NAME'] = os.getenv('GITHUB_HEAD_REF')
+        else:
+            os.environ['BRANCH_NAME'] = os.getenv('GITHUB_REF_NAME') 
     if "IS_PR'" not in os.environ:
-           os.environ['IS_PR'] = os.getenv('CI_PIPELINE_SOURCE')
+           os.environ['IS_PR'] = os.getenv('GITHUB_EVENT_NAME')
     if "TARGET" not in os.environ:
-        os.environ['TARGET'] = os.getenv('CI_MERGE_REQUEST_TARGET_BRANCH_NAME')
+        os.environ['TARGET'] = os.getenv('GITHUB_BASE_REF')
     if "COMMIT_HASH" not in os.environ:
-        os.environ['COMMIT_HASH'] = os.getenv('CI_COMMIT_SHA')
+        os.environ['COMMIT_HASH'] = os.getenv('GITHUB_SHA')
     if "TOKEN" not in os.environ:
-        os.environ['TOKEN'] = os.getenv('CI_JOB_TOKEN')    
+        os.environ['TOKEN'] = os.getenv('GITHUB_TOKEN')    
 
 
 # checking environment variables
