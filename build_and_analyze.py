@@ -80,7 +80,7 @@ if "CI_MERGE_REQUEST_IID" in os.environ:
         os.environ['TOKEN'] = os.getenv('CI_JOB_TOKEN')
 
 # checking for GitHub variables
-if "GITHUB_ACTION" in os.environ":
+if "GITHUB_ACTION" in os.environ:
     GitHub=True
     if "REQUEST_NUMBER" not in os.environ:
         os.environ['REQUEST_NUMBER'] = os.getenv('CI_MERGE_REQUEST_IID')
