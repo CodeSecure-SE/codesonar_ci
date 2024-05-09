@@ -68,17 +68,17 @@ if os.getenv("CI_COMMIT_SHA") is not None:
     GitLab=True
     print("Reading GitLab environment variables")
     if os.getenv("REQUEST_NUMBER") is None:
-        os.environ['REQUEST_NUMBER'] = os.getenv('CI_MERGE_REQUEST_IID')
+        os.environ['REQUEST_NUMBER'] = os.getenv('CI_MERGE_REQUEST_IID', "None")
     if os.getenv("BRANCH_NAME") is None:
-        os.environ['BRANCH_NAME'] = os.getenv('CI_COMMIT_REF_NAME')
+        os.environ['BRANCH_NAME'] = os.getenv('CI_COMMIT_REF_NAME', "None")
     if os.getenv("IS_PR") is None:
-           os.environ['IS_PR'] = os.getenv('CI_PIPELINE_SOURCE')
+           os.environ['IS_PR'] = os.getenv('CI_PIPELINE_SOURCE', "None")
     if os.getenv("TARGET") is None:
-        os.environ['TARGET'] = os.getenv('CI_MERGE_REQUEST_TARGET_BRANCH_NAME')
+        os.environ['TARGET'] = os.getenv('CI_MERGE_REQUEST_TARGET_BRANCH_NAME', "None")
     if os.getenv("COMMIT_HASH") is None:
-        os.environ['COMMIT_HASH'] = os.getenv('CI_COMMIT_SHA')
+        os.environ['COMMIT_HASH'] = os.getenv('CI_COMMIT_SHA', "None")
     if os.getenv("TOKEN") is None:
-        os.environ['TOKEN'] = os.getenv('CI_JOB_TOKEN')
+        os.environ['TOKEN'] = os.getenv('CI_JOB_TOKEN', "None")
 
 # checking for GitHub variables
 if os.getenv("GITHUB_ACTION") is not None:
@@ -130,7 +130,7 @@ target_project_aid = 0
 # If this is a PR/MR, find the analysis-id of the latest analysis on the target branch
 print("IS_PR: " +os.getenv('IS_PR'))   
 if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_event':
-    # TODO: Dont think this is working for GitLab
+    
     link = "{\"limit\":1,\"orderBy\":[{\"analysisId\":\"DESCENDING\"}],\"columns\":[\"analysisId\"]}"
     query = "\"branch_name\"=\"" + os.getenv("TARGET") + "\"state=\"Finished\""
 
