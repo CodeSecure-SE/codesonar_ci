@@ -66,12 +66,18 @@ def check_env(s, t):
 # checking for GitLab variables
 if os.getenv('CI_MERGE_REQUEST_IID') is not None:
     GitLab=True
-    os.environ['REQUEST_NUMBER'] = os.getenv('CI_MERGE_REQUEST_IID')
-    os.environ['BRANCH_NAME'] = os.getenv('CI_COMMIT_REF_NAME')
-    os.environ['IS_PR'] = os.getenv('CI_PIPELINE_SOURCE')
-    os.environ['TARGET'] = os.getenv('CI_MERGE_REQUEST_TARGET_BRANCH_NAME')
-    os.environ['COMMIT_HASH'] = os.getenv('CI_COMMIT_SHA')
-    os.environ['TOKEN'] = os.getenv('CI_JOB_TOKEN')
+    if os.environ['REQUEST_NUMBER'] is None:
+        os.environ['REQUEST_NUMBER'] = os.getenv('CI_MERGE_REQUEST_IID')
+    if os.environ['BRANCH_NAME'] is None:
+        os.environ['BRANCH_NAME'] = os.getenv('CI_COMMIT_REF_NAME')
+    if os.environ['IS_PR'] is None:
+           os.environ['IS_PR'] = os.getenv('CI_PIPELINE_SOURCE')
+    if os.environ['TARGET'] is None:
+        os.environ['TARGET'] = os.getenv('CI_MERGE_REQUEST_TARGET_BRANCH_NAME')
+    if os.environ['COMMIT_HASH'] is None:
+        os.environ['COMMIT_HASH'] = os.getenv('CI_COMMIT_SHA')
+    if os.environ['TOKEN'] is None:
+        os.environ['TOKEN'] = os.getenv('CI_JOB_TOKEN')
 
 
 # checking environment variables
