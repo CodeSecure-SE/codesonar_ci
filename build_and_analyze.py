@@ -182,7 +182,7 @@ namestr = datetime.now().strftime("%m/%d/%Y-%H:%M:%S")
 commandStr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar build -clean " + os.getenv("PROJECT_NAME") + " " +\
                 uploadFlag + " -foreground " + preset + " -auth  password -hubuser " + os.getenv('CSONAR_HUB_USER') + \
                 " -hubpwfile " + CSONAR_HUB_PW_FILE + " -project ", os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
-                " -name " +namestr + " -conf-file " + conf_file + " " + os.getenv("CSONAR_HUB_URL") + " " + str(build_command)
+                " -name " +namestr + " -conf-file " + conf_file + " " + os.getenv("CSONAR_HUB_URL") + " " + " ".join(build_command)
 
 if Debug:
     print(commandStr)
