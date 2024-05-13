@@ -27,7 +27,6 @@ jobs:
       CSONAR_HUB_URL: "https://duck.dyndns.org:7340" 
       CSONAR_HUB_USER: "${{ secrets.CSONAR_HUB_USER }}"
       CSONAR_HUB_PASSWORD: "${{ secrets.CSONAR_HUB_PASS }}"
-      CSONAR_CSHOME: /opt/codesonar
       CS_USER_HOME: /__w/codesonar_ci/codesonar_ci
       COMMIT_HASH: ${{ github.sha }}
       REPO_URL: "https://github.com/CodeSecure-SE/codesonar_ci"    # the github.repositoryUrl is not an http-link.
