@@ -44,6 +44,15 @@ if '-cwe' in sys.argv:
 if ('-misra' in sys.argv):
     MISRA=True
     sys.argv.remove('-misra')
+    
+preset = ""
+# Check for presets
+if '-preset' in sys.argv:
+    i = sys.argv.index("-preset")
+    preset = "- preset " + sys.argv[i+1]
+    sys.argv.remove(sys.argv[i+1])
+    sys.argv.remove(sys.argv[i]);  
+    
 
 uploadFlag = '-remote-archive \"/saas/*\"'
 if ('-noupload' in sys.argv):
@@ -250,7 +259,7 @@ else:
     targetStr=os.getenv('TARGET')
 
 commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + \
-     os.getenv("PROJECT_NAME") + " " + uploadFlag + " -foreground " +  \
+     os.getenv("PROJECT_NAME") + " " + uploadFlag + " -foreground " +  preset + \
             " -auth password" + \
             " -hubuser " + os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + \
             " -project " + os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
