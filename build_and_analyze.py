@@ -6,13 +6,12 @@
 
 
 import os
-import time
 import subprocess
 import sys
 import urllib.parse
+import urllib.request
+import urllib.error
 from datetime import datetime
-import urllib.request, urllib.error
-import subprocess
 import csv
 
 
@@ -44,6 +43,15 @@ if '-cwe' in sys.argv:
 if ('-misra' in sys.argv):
     MISRA=True
     sys.argv.remove('-misra')
+    
+preset = ""
+# Check for presets
+if '-preset' in sys.argv:
+    i = sys.argv.index("-preset")
+    preset = "-preset " + sys.argv[i+1]
+    sys.argv.remove(sys.argv[i+1])
+    sys.argv.remove(sys.argv[i]);  
+    
 
 uploadFlag = '-remote-archive \"/saas/*\"'
 if ('-noupload' in sys.argv):
@@ -171,44 +179,19 @@ if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_
 namestr = datetime.now().strftime("%m/%d/%Y-%H:%M:%S")
 
 #Perform the actual build
-if (uploadFlag == ""):
-    command = [os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar", 
-                      "build",
-                      "-clean",
-                      os.getenv("PROJECT_NAME"),
-                        "-foreground",
-                        "-auth", "password", 
-                        "-hubuser", os.getenv('CSONAR_HUB_USER'),
-                        "-hubpwfile", CSONAR_HUB_PW_FILE,
-                        "-project", os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME"),
-                        "-name", namestr,
-                        "-conf-file", conf_file,
-                        os.getenv("CSONAR_HUB_URL")] + build_command
-else:
-       command = [os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar", 
-                      "build",
-                      "-clean",
-                      os.getenv("PROJECT_NAME"),
-                        "-remote-archive",  "\"/saas/*\"",
-                        "-foreground",
-                        "-auth", "password", 
-                        "-hubuser", os.getenv('CSONAR_HUB_USER'),
-                        "-hubpwfile", CSONAR_HUB_PW_FILE,
-                        "-project", os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME"),
-                        "-name", namestr,
-                        "-conf-file", conf_file,
-                        os.getenv("CSONAR_HUB_URL")] + build_command
-
-p = subprocess.Popen(command, shell=False)
-result = p.wait()
+commandStr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar build -clean " + os.getenv("PROJECT_NAME") + " " +\
+                uploadFlag + " -foreground " + preset + " -auth  password -hubuser " + os.getenv('CSONAR_HUB_USER') + \
+                " -hubpwfile " + CSONAR_HUB_PW_FILE + " -project " + os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
+                " -name " +namestr + " -conf-file " + conf_file + " " + os.getenv("CSONAR_HUB_URL") + " " + " ".join(build_command)
 
 if Debug:
-    print(command)
+    print(commandStr)
 
+result = os.system(commandStr) 
 
 if result != 0:
-    print ("Problem running build command")
-    sys.exit(1)
+    print ("Problem running build command " + commandStr)
+    sys.exit(1)   
 
 #Construct the properties
 if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_event':
@@ -250,7 +233,7 @@ else:
     targetStr=os.getenv('TARGET')
 
 commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar analyze " + \
-     os.getenv("PROJECT_NAME") + " " + uploadFlag + " -foreground " +  \
+     os.getenv("PROJECT_NAME") + " " + uploadFlag + " -foreground " +  preset + \
             " -auth password" + \
             " -hubuser " + os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + \
             " -project " + os.getenv("ROOT_TREE") + "/" + os.getenv("BRANCH_NAME") + \
