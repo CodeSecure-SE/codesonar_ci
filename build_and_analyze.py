@@ -11,7 +11,7 @@ import sys
 import urllib.parse
 import urllib.request
 import urllib.error
-import datetime
+from datetime import datetime
 import csv
 
 
