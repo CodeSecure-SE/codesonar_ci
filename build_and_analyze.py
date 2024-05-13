@@ -21,6 +21,9 @@ Debug = True
 
 CWE = False
 MISRA = False
+GitLab = False
+GitHub = False
+
 transcodeFile = ""
 
 # first check if we have all the required arguments
@@ -60,6 +63,48 @@ def check_env(s, t):
         print("Missing " + s + " environment variable, should be set to " + t)
         all_ok=0   
 
+# checking for GitLab variables
+if os.getenv("CI_COMMIT_SHA") is not None:
+    GitLab=True
+    print("Reading GitLab environment variables")
+    if os.getenv("REQUEST_NUMBER") is None:
+        os.environ['REQUEST_NUMBER'] = os.getenv('CI_MERGE_REQUEST_IID', "None")
+    if os.getenv("BRANCH_NAME") is None:
+        os.environ['BRANCH_NAME'] = os.getenv('CI_COMMIT_REF_NAME', "None")
+    if os.getenv("IS_PR") is None:
+           os.environ['IS_PR'] = os.getenv('CI_PIPELINE_SOURCE', "None")
+    if os.getenv("TARGET") is None:
+        os.environ['TARGET'] = os.getenv('CI_MERGE_REQUEST_TARGET_BRANCH_NAME', "None")
+    if os.getenv("COMMIT_HASH") is None:
+        os.environ['COMMIT_HASH'] = os.getenv('CI_COMMIT_SHA', "None")
+    if os.getenv("TOKEN") is None:
+        os.environ['TOKEN'] = os.getenv('CI_JOB_TOKEN', "None")
+
+# checking for GitHub variables
+if os.getenv("GITHUB_ACTION") is not None:
+    GitHub=True
+    if "REQUEST_NUMBER" not in os.environ:
+        ref = os.getenv('GITHUB_REF_NAME')
+        if ref.endswith("/merge"):
+            os.environ['REQUEST_NUMBER'] = ref.split("/")[0]
+        else:
+            os.environ['REQUEST_NUMBER'] = "None"
+  
+    if "BRANCH_NAME" not in os.environ:
+        if os.getenv('GITHUB_HEAD_REF') is not None:
+            os.environ['BRANCH_NAME'] = os.getenv('GITHUB_HEAD_REF')
+        else:
+            os.environ['BRANCH_NAME'] = os.getenv('GITHUB_REF_NAME') 
+    if "IS_PR'" not in os.environ:
+           os.environ['IS_PR'] = os.getenv('GITHUB_EVENT_NAME')
+    if "TARGET" not in os.environ:
+        os.environ['TARGET'] = os.getenv('GITHUB_BASE_REF')
+    if "COMMIT_HASH" not in os.environ:
+        os.environ['COMMIT_HASH'] = os.getenv('GITHUB_SHA')
+    if "TOKEN" not in os.environ:
+        os.environ['TOKEN'] = os.getenv('GITHUB_TOKEN')    
+
+
 # checking environment variables
 check_env('CSONAR_HUB_URL', 'URL for CodeSonar HUB') 
 check_env('CSONAR_HUB_USER', 'Username for CodeSonar HUB')
@@ -68,7 +113,7 @@ check_env('CSONAR_CSHOME', 'Path to CodeSonar installation')
 check_env('ROOT_TREE', 'Path to the project-tree in the CodeSonar HUB')
 check_env('PROJECT_NAME', 'Name of the project in the CodeSonar HUB')
 check_env('TOKEN', 'Token API')
-check_env('CAFILE', 'Path to CA (cert) file')
+#check_env('CAFILE', 'Path to CA (cert) file')
 check_env('REPO_URL', 'URL for repository')
 check_env('REQUEST_NUMBER', 'Pull/Merge request ID')
 check_env('BRANCH_NAME', 'Name of the current branch ')
@@ -93,7 +138,7 @@ target_project_aid = 0
 # If this is a PR/MR, find the analysis-id of the latest analysis on the target branch
 print("IS_PR: " +os.getenv('IS_PR'))   
 if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_event':
-    # TODO: Dont think this is working for GitLab
+    
     link = "{\"limit\":1,\"orderBy\":[{\"analysisId\":\"DESCENDING\"}],\"columns\":[\"analysisId\"]}"
     query = "\"branch_name\"=\"" + os.getenv("TARGET") + "\"state=\"Finished\""
 
@@ -367,6 +412,18 @@ if MISRA and not CWE:
     os.rename("warnings-MISRA.sarif", "warnings-translate.sarif")
 
 
+#Last step: generate the json that GitLab wants
+if GitLab:
+        commandstr = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/cspython /opt/codesonar-gitlab/codesonar-sarif2sast/sarif2sast.py --sarif warnings.sarif --output gl-sast-report.json " + \
+           "--codesonar-url " + os.getenv("CSONAR_HUB_URL") + " --analysis-id " + str(current_project_aid)
+        result=os.system(commandstr)
+        print (commandstr)
+
+        if result!= 0:
+            print ("Error converting SARIF file to GitLab json")
+            print (commandstr)
+            sys.exit(0)  #TODO: change to exit 1
+       
 
 # remove hub credentials
 if not Debug:
