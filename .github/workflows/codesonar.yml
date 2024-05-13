@@ -10,7 +10,7 @@ on:
 jobs:
   CodeSonar_Analyze:
     permissions: write-all
-    runs-on: self-hosted
+    runs-on: codesecure-runner-set
     container:
       image: ghcr.io/codesecure-se/numpy-cso-builder:8.1b0
       credentials:
@@ -62,5 +62,5 @@ jobs:
       - name: Upload SARIF results
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: warnings.sarif
+          sarif_file: warnings.sarif           
           category: "CodeSecure CodeSonar"            
