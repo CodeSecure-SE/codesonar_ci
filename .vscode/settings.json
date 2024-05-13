@@ -1,4 +1,4 @@
 {
     "sarif-viewer.connectToGithubCodeScanning": "off",
-    "codesonar.project": "/OSS-Projects/codesonar_ci/feature/misra-priority"
+    "codesonar.project": "/OSS-Projects/codesonar_ci/feature/allow-presets"
 }

@@ -163,3 +163,4 @@ codesonar_ci*.*
 *.csv
 *.conf
 settings.json
+.vscode/settings.json

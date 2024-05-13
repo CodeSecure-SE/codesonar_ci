@@ -6,13 +6,12 @@
 
 
 import os
-import time
 import subprocess
 import sys
 import urllib.parse
-from datetime import datetime
-import urllib.request, urllib.error
-import subprocess
+import urllib.request
+import urllib.error
+import datetime
 import csv
 
 
