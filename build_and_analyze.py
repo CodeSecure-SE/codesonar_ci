@@ -48,7 +48,7 @@ preset = ""
 # Check for presets
 if '-preset' in sys.argv:
     i = sys.argv.index("-preset")
-    preset = "- preset " + sys.argv[i+1]
+    preset = "-preset " + sys.argv[i+1]
     sys.argv.remove(sys.argv[i+1])
     sys.argv.remove(sys.argv[i]);  
     
