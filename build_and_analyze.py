@@ -107,6 +107,8 @@ if os.getenv("GITHUB_ACTION") is not None:
 
 # checking environment variables
 check_env('CSONAR_HUB_URL', 'URL for CodeSonar HUB') 
+os.environ['CSONAR_HUB_URL'] = os.getenv('CSONAR_HUB_URL').rstrip('/')
+
 check_env('CSONAR_HUB_USER', 'Username for CodeSonar HUB')
 check_env('CSONAR_HUB_PASSWORD', 'Password for CodeSonar HUB')
 check_env('CSONAR_CSHOME', 'Path to CodeSonar installation')
