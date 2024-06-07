@@ -59,7 +59,7 @@ all_ok=1
 
 def check_env(s, t):
     global all_ok
-    if os.getenv(s) is None:
+    if (os.getenv(s) is None) or (os.getenv(s) == ""):
         print("Missing " + s + " environment variable, should be set to " + t)
         all_ok=0   
 
