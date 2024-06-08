@@ -91,7 +91,7 @@ if os.getenv("GITHUB_ACTION") is not None:
             os.environ['REQUEST_NUMBER'] = "None"
   
     if "BRANCH_NAME" not in os.environ:
-        if os.getenv('GITHUB_HEAD_REF') is not None:
+        if (os.getenv('GITHUB_HEAD_REF') is not None) and (os.getenv("GITHUB_HEAD_REF") != ""):
             os.environ['BRANCH_NAME'] = os.getenv('GITHUB_HEAD_REF')
         else:
             os.environ['BRANCH_NAME'] = os.getenv('GITHUB_REF_NAME') 
@@ -107,6 +107,8 @@ if os.getenv("GITHUB_ACTION") is not None:
 
 # checking environment variables
 check_env('CSONAR_HUB_URL', 'URL for CodeSonar HUB') 
+os.environ['CSONAR_HUB_URL'] = os.getenv('CSONAR_HUB_URL').rstrip('/')
+
 check_env('CSONAR_HUB_USER', 'Username for CodeSonar HUB')
 check_env('CSONAR_HUB_PASSWORD', 'Password for CodeSonar HUB')
 check_env('CSONAR_CSHOME', 'Path to CodeSonar installation')
@@ -134,6 +136,7 @@ f.write(os.getenv('CSONAR_HUB_PASSWORD'))
 f.close()
 
 target_project_aid = 0
+
 
 # If this is a PR/MR, find the analysis-id of the latest analysis on the target branch
 print("IS_PR: " +os.getenv('IS_PR'))   
