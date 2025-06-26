@@ -1,3 +1,7 @@
 {
-    "sarif-viewer.connectToGithubCodeScanning": "off"
+    "sarif-viewer.connectToGithubCodeScanning": "off",
+    "codesonar.project": "/OSS-Projects/codesonar_ci/feature/misra-priority",
+    "githubPullRequests.ignoredPullRequestBranches": [
+        "release/BreezeNavigator"
+    ]
 }
