@@ -141,36 +141,48 @@ target_project_aid = 0
 # If this is a PR/MR, find the analysis-id of the latest analysis on the target branch
 print("IS_PR: " +os.getenv('IS_PR'))   
 if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_event':
-    
     link = "{\"limit\":1,\"orderBy\":[{\"analysisId\":\"DESCENDING\"}],\"columns\":[\"analysisId\"]}"
     query = "\"branch_name\"=\"" + os.getenv("TARGET") + "\"state=\"Finished\""
 
-    command = os.getenv('CSONAR_CSHOME') + "/codesonar/bin/codesonar get -auth password -hubuser " + \
-        os.getenv('CSONAR_HUB_USER') + " -hubpwfile " + CSONAR_HUB_PW_FILE + " " + \
-        os.getenv('CSONAR_HUB_URL') + "/analysis_search.csv?sanlgrid_json=" + \
-        urllib.parse.quote(link) + "\&query=" + urllib.parse.quote(query) + " -o - > result"
+    # Build the URL
+    url = (
+        os.getenv('CSONAR_HUB_URL') +
+        "/analysis_search.csv?sanlgrid_json=" + urllib.parse.quote(link) +
+        "&query=" + urllib.parse.quote(query)
+    )
 
-    if Debug: 
-        print ("Command: " + command)
-
-    result = os.system(command)
-
-
-    if result != 0:
-        print ("Error retrieving analysis id")
-        sys.exit(1)
-
-    f = open("result", "r")
-    resultFile = f.read()
-    if len(resultFile.splitlines()) < 2:
-        print ("No existing analysis found, continuing")
-        target_project_aid = str("0")
-    else: 
-        target_project_aid = resultFile.splitlines()[1]
-    f.close()
+    command = [
+        os.path.join(os.getenv('CSONAR_CSHOME'), "codesonar", "bin", "codesonar"),
+        "get",
+        "-auth", "password",
+        "-hubuser", os.getenv('CSONAR_HUB_USER'),
+        "-hubpwfile", CSONAR_HUB_PW_FILE,
+        url,
+        "-o", "-"
+    ]
 
     if Debug:
-        print ("Target project analysis id: " + str(target_project_aid))
+        print("Command:", " ".join(command))
+
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, check=True)
+        with open("result", "w", encoding="utf-8") as f:
+            f.write(result.stdout)
+    except subprocess.CalledProcessError as e:
+        print("Error retrieving analysis id")
+        print(e)
+        sys.exit(1)
+
+    with open("result", "r", encoding="utf-8") as f:
+        resultFile = f.read()
+    if len(resultFile.splitlines()) < 2:
+        print("No existing analysis found, continuing")
+        target_project_aid = str("0")
+    else:
+        target_project_aid = resultFile.splitlines()[1]
+
+    if Debug:
+        print("Target project analysis id: " + str(target_project_aid))
 namestr = datetime.now().strftime("%m/%d/%Y-%H:%M:%S")
 
 #Perform the actual build
