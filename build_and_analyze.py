@@ -138,7 +138,7 @@ def check_tree_existence(tree):
             url = os.getenv('CSONAR_HUB_URL') + "/projecttree/" + str(parent) + ".csv"
             data = {"new_ptree_name": part}
             print("Creating tree: " + url)
-            sys.exit(1))
+            sys.exit(1)
             try:
                 response = requests.post(
                     url,
