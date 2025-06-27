@@ -278,6 +278,7 @@ if os.getenv('IS_PR') != 'None':
     ]
 
     try:
+        print ("Running: " + " ".join(command))
         result = subprocess.run(command, shell=False, capture_output=True, text=True)
         
         if len(result.stdout.splitlines()) < 2:
