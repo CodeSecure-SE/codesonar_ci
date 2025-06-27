@@ -351,9 +351,9 @@ def main():
 
 
     if os.getenv('TARGET') == "":
-    targetStr="None"
+        targetStr="None"
     else: 
-    targetStr=os.getenv('TARGET')
+        targetStr=os.getenv('TARGET')
 
 
 
