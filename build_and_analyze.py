@@ -185,7 +185,7 @@ def main():
     parser.add_argument('-noupload', action='store_true', help='Do not upload remote archive')
 
     args = parser.parse_args()
-    sys.exit(1)
+
     if not args.conf_file:
         print("Insufficient parameters, exiting")
         print("Usage: build_and_analyze.py [options] <conf-file> <build-command>")
@@ -263,7 +263,7 @@ def main():
         ampersand = "^&"
     else:
         ampersand = "&"
-
+    sys.exit(1)
     # If this is a PR/MR, find the analysis-id of the latest analysis on the target branch
     if os.getenv('IS_PR') != 'None':
         
