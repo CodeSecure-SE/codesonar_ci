@@ -104,7 +104,7 @@ def check_tree_existence(tree):
         print("Analyzing part: " + part)
         if current_tree=="":
             current_tree += "/"
-        sys.exit(1)
+
             
         current_tree += part
             
@@ -168,7 +168,7 @@ def check_tree_existence(tree):
                     found = True 
                     url = row['url']
                     parent = re.search(r'/(\d+)\.csv$', url).group(1)
-
+            sys.exit(1)
 
                 
 
