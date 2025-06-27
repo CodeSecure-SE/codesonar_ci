@@ -104,6 +104,7 @@ def check_tree_existence(tree):
         print("Analyzing part: " + part)
         if current_tree=="":
             current_tree += "/"
+        sys.exit(1)
             
         current_tree += part
             
