@@ -101,7 +101,8 @@ def check_tree_existence(tree):
     parent = 1
     result = None
     for part in tree_parts:
-        if current_tree:
+        print("Analyzing part: " + part)
+        if current_tree=="":
             current_tree += "/"
             
         current_tree += part
@@ -299,7 +300,7 @@ def main():
     # Test if the project tree exists
     print ("Checking project tree")
     check_tree_existence(os.getenv("ROOT_TREE")+"/"+os.getenv("BRANCH_NAME"))
-    sys.exit(1)
+    
 
 
     cmd = [
