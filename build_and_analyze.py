@@ -137,6 +137,8 @@ def check_tree_existence(tree):
             print ("Creating project tree: " + part + " in parent: " + str(parent))
             url = os.getenv('CSONAR_HUB_URL') + "/projecttree/" + str(parent) + ".csv"
             data = {"new_ptree_name": part}
+            print("Creating tree: " + url)
+            sys.exit(1))
             try:
                 response = requests.post(
                     url,
@@ -168,7 +170,7 @@ def check_tree_existence(tree):
                     found = True 
                     url = row['url']
                     parent = re.search(r'/(\d+)\.csv$', url).group(1)
-            sys.exit(1)
+            
 
                 
 
