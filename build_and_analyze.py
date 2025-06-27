@@ -284,10 +284,10 @@ def main():
             result = subprocess.run(command, shell=False, capture_output=True, text=True)
             
             if len(result.stdout.splitlines()) < 2:
-            print ("No existing analysis found, continuing")
-            target_project_aid = "0"
+                print ("No existing analysis found, continuing")
+                target_project_aid = "0"
             else: 
-            target_project_aid = result.stdout.splitlines()[1]
+                target_project_aid = result.stdout.splitlines()[1]
         except subprocess.CalledProcessError as e:
             print(f"Error retrieving analysis id: {' '.join(command)}")
             print(f"Error details: {e.stderr}")
