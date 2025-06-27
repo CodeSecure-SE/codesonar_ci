@@ -263,7 +263,7 @@ def main():
         ampersand = "^&"
     else:
         ampersand = "&"
-    sys.exit(1)
+    
     # If this is a PR/MR, find the analysis-id of the latest analysis on the target branch
     if os.getenv('IS_PR') != 'None':
         
@@ -299,6 +299,7 @@ def main():
     # Test if the project tree exists
     print ("Checking project tree")
     check_tree_existence(os.getenv("ROOT_TREE")+"/"+os.getenv("BRANCH_NAME"))
+    sys.exit(1)
 
 
     cmd = [
