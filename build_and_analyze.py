@@ -174,7 +174,7 @@ def main():
     # first check if we have all the required arguments
 
     print("CodeSonar Build and Analyze Script")
-    sys.exit(1)
+    
 
     parser = argparse.ArgumentParser(description="Wrapper for CodeSonar analyze command.")
     parser.add_argument('conf_file', help='Path to the configuration file')
@@ -185,7 +185,7 @@ def main():
     parser.add_argument('-noupload', action='store_true', help='Do not upload remote archive')
 
     args = parser.parse_args()
-
+    sys.exit(1)
     if not args.conf_file:
         print("Insufficient parameters, exiting")
         print("Usage: build_and_analyze.py [options] <conf-file> <build-command>")
