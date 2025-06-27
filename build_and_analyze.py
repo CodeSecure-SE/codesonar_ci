@@ -173,6 +173,8 @@ def check_tree_existence(tree):
 
 # first check if we have all the required arguments
 
+print("CodeSonar Build and Analyze Script")
+
 parser = argparse.ArgumentParser(description="Wrapper for CodeSonar analyze command.")
 parser.add_argument('conf_file', help='Path to the configuration file')
 parser.add_argument('build_command', nargs=argparse.REMAINDER, help='Build command and its arguments')
