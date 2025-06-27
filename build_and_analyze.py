@@ -174,6 +174,7 @@ def main():
     # first check if we have all the required arguments
 
     print("CodeSonar Build and Analyze Script")
+    sys.exit(1)
 
     parser = argparse.ArgumentParser(description="Wrapper for CodeSonar analyze command.")
     parser.add_argument('conf_file', help='Path to the configuration file')
