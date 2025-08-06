@@ -381,7 +381,6 @@ def main():
         "-hubpwfile", CSONAR_HUB_PW_FILE,
         "-project", f"{os.getenv('ROOT_TREE')}/{os.getenv('BRANCH_NAME')}",
         "-property", "new_findings", property_new_findings,
-        "-property", "job_link", property_job_link,
         "-property", "target_branch" ,targetStr,
         "-property", "commit_link", property_commit_link,
         "-property", "branch_name", os.getenv('BRANCH_NAME'),
@@ -389,6 +388,8 @@ def main():
         "-conf-file", conf_file,
         os.getenv("CSONAR_HUB_URL")
     ])
+
+    print(f"Running analyze command: {' '.join(analyze_cmd)}")
 
     try:
         result = subprocess.run(
