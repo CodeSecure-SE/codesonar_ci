@@ -202,7 +202,7 @@ def main():
     CWE = args.cwe
     MISRA = args.misra
     preset = f"-preset {args.preset}" if args.preset else ""
-    uploadFlag = '' if args.noupload else '-remote-archive /saas/*'
+    uploadFlag = '' if args.noupload else '-remote-archive /analyze/*'
     conf_file = args.conf_file
     build_command = args.build_command
 
