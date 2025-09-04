@@ -357,7 +357,7 @@ def main():
     if os.getenv('IS_PR') != "None":
         property_new_findings = os.getenv('CSONAR_HUB_URL') +"/search.html?query=" + \
             urllib.parse.quote("aid:"+str(current_project_aid) + " DIFFERENCE aid:" + str(target_project_aid)) + \
-            ampersand + "scope=" + urllib.parse.quote("aid:" + str(current_project_aid)) + ampersand + "swarnings=BJAW"
+             "&scope=" + urllib.parse.quote("aid:" + str(current_project_aid)) + "&swarnings=BJAW"
     else:
         property_new_findings = "Not available"
 
@@ -426,7 +426,7 @@ def main():
     # Download the new findings results in SARIF, if it is a merge/pull request
     if os.getenv('IS_PR') == 'pull_request' or os.getenv('IS_PR') == 'merge_request_event':
         # Pull just the changes
-        print ("Running in a Merge Request, pulling only the new warnings.")
+        print ("Running in a Merge Request/Pull Request, pulling only the new warnings.")
         # Build command to get warning details in SARIF format
         # Note that we are using codesonar get here and not dump_warnings. 
         # dump_warnings cannot to the difference search that we want
@@ -470,7 +470,7 @@ def main():
 
     
     else:
-        print ("No Merge Request detected, pulling All Warnings.")
+        print ("No Merge Request/Pull Request detected, pulling All Warnings.")
         # Pull everything as a summary
         dump_warnings_cmd = [
             codesonar_command,
