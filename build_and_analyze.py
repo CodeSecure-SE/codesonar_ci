@@ -176,6 +176,13 @@ def check_tree_existence(tree):
                 
 
 def main():
+    global CWE, MISRA, GitLab, GitHub, transcodeFile
+
+    # Now you can read and assign to these variables inside main()
+    CWE = True
+    MISRA = False
+    
+
     # first check if we have all the required arguments
 
     print("CodeSonar Build and Analyze Script")
