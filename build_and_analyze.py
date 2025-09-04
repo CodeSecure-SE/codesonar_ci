@@ -438,7 +438,7 @@ def main():
             "-hubpwfile", CSONAR_HUB_PW_FILE,
             f"{os.getenv('CSONAR_HUB_URL')}/warning_detail_search.sarif"
             f"?filter=%22active%20not%20clustered%22&"
-            f"&query={urllib.parse.quote(f'aid:{current_project_aid} DIFFERENCE aid:{target_project_aid}')}"
+            f"query={urllib.parse.quote(f'aid:{current_project_aid} DIFFERENCE aid:{target_project_aid}')}"
             f"&scope={urllib.parse.quote(f'aid:{current_project_aid}')}"
             f"&swarnings=BJAW",
             "-o", "-"
